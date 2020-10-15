@@ -41,6 +41,11 @@ Attention! DO NOT RESTORE, BUILD!
     ```
     dotnet new -i AspCore.Microservices.Templates --nuget-source <NUGET NAME>
     ```
+    or from *.nupkg
+    ```
+    dotnet new -i c:\code\nuget-packages\Some.Templates.1.0.0.nupkg
+    ```
+    see more [here](https://docs.microsoft.com/ru-ru/dotnet/core/install/templates?pivots=os-windows)
 
 0. Create new service from template
     ```
