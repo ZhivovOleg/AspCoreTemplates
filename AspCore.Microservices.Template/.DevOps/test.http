@@ -1,0 +1,19 @@
+### 
+
+# Test using VSCode + REST Client
+# https://marketplace.visualstudio.com/items?itemName=humao.rest-client
+# or internal Rider rest-client
+
+###
+
+POST http://localhost:9000/example/GetExample HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+Cache-Control: no-cache
+
+{
+  "Id": 0,
+  "Guid": "4b91bfbf-007b-423d-9042-5454e1ca2130"
+}
+
+###
