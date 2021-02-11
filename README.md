@@ -38,13 +38,21 @@ Attention! DO NOT RESTORE, BUILD!
     ```
 
 0. Install templates
-    ```
-    dotnet new -i AspCore.Microservices.Templates --nuget-source <NUGET NAME>
-    ```
-    or from *.nupkg
-    ```
-    dotnet new -i c:\code\nuget-packages\Some.Templates.1.0.0.nupkg
-    ```
+    - From nuget.org:
+        ```
+        dotnet new -i Salt.Microservices.Templates
+        ```
+        
+    - From your own nuget sourse:
+        ```
+        dotnet new -i AspCore.Microservices.Templates --nuget-source <NUGET NAME>
+        ```
+    
+    - Or from *.nupkg
+        ```
+        dotnet new -i c:\code\nuget-packages\Some.Templates.1.0.0.nupkg
+        ```
+    
     see more [here](https://docs.microsoft.com/ru-ru/dotnet/core/install/templates?pivots=os-windows)
 
 0. Create new service from template
