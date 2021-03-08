@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
     <metadata>
-        <id>SALT.Core.Templates</id>
+        <id>Salt.Microservices.Templates</id>
         <version>0.0.1</version>
         <description>Simple and Light templates for dotnet</description>
         <authors>Zhivov Oleg A.</authors>
@@ -13,5 +13,5 @@
 </package>
 
 <!-- create package (powershell) 
-dotnet pack -c Release -o .\ -p:NuspecFile=SALT.Core.Templates.nuspec -p:NuspecProperties="version=$(Get-Date -Format 'yyyy.MMdd.HHmm')"
+dotnet pack -c Release -o .\ -p:NuspecFile=Salt.Core.Templates.nuspec -p:NuspecProperties="version=$(Get-Date -Format 'yyyy.MMdd.HHmm')"
 -->

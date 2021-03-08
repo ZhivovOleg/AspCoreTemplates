@@ -1,0 +1,12 @@
+D:\Git\AspCoreTemplates\bin\Release\net5.0\SALT.Core.Templates.deps.json
+D:\Git\AspCoreTemplates\bin\Release\net5.0\SALT.Core.Templates.dll
+D:\Git\AspCoreTemplates\bin\Release\net5.0\ref\SALT.Core.Templates.dll
+D:\Git\AspCoreTemplates\bin\Release\net5.0\SALT.Core.Templates.pdb
+D:\Git\AspCoreTemplates\obj\Release\net5.0\SALT.Core.Templates.csprojAssemblyReference.cache
+D:\Git\AspCoreTemplates\obj\Release\net5.0\SALT.Core.Templates.GeneratedMSBuildEditorConfig.editorconfig
+D:\Git\AspCoreTemplates\obj\Release\net5.0\SALT.Core.Templates.AssemblyInfoInputs.cache
+D:\Git\AspCoreTemplates\obj\Release\net5.0\SALT.Core.Templates.AssemblyInfo.cs
+D:\Git\AspCoreTemplates\obj\Release\net5.0\SALT.Core.Templates.csproj.CoreCompileInputs.cache
+D:\Git\AspCoreTemplates\obj\Release\net5.0\SALT.Core.Templates.dll
+D:\Git\AspCoreTemplates\obj\Release\net5.0\ref\SALT.Core.Templates.dll
+D:\Git\AspCoreTemplates\obj\Release\net5.0\SALT.Core.Templates.pdb
