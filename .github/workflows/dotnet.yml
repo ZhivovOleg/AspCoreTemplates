@@ -18,6 +18,6 @@ jobs:
       with:
         dotnet-version: 5.0.x
     - name: Pack
-      run: dotnet pack -c Release -p:NuspecFile=SALT.Core.Templates.nuspec -p:NuspecProperties="version=$(date '+%Y.%m%d.%H%M')"
+      run: dotnet pack -c Release -p:NuspecFile=SALT.Core.Templates.nuspec -p:NuspecProperties="version=$(date '+%Y.%m%d.%H%M')" --output .
     - name: Push to nuget.org
       run: dotnet nuget push *.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{secrets.NUGET_SECRET}} --skip-duplicate
