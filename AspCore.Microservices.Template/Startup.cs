@@ -40,7 +40,7 @@ namespace AspCore.Microservices.Template
 		/// </summary>
         public void ConfigureServices(IServiceCollection services)
 		{
-			AppSettings appSettings = new AppSettings();
+			AppSettings appSettings = new();
 			_configuration.Bind(appSettings);
 			services
 				.Configure<AppSettings>(_configuration)

@@ -7,7 +7,7 @@
     <SelfContained>false</SelfContained>
     <IsTransformWebConfigDisabled>true</IsTransformWebConfigDisabled>
     <AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel>
-    <LangVersion>8</LangVersion>
+    <LangVersion>9</LangVersion>
     <RootNamespace>AspCore.Microservices.Template</RootNamespace>
   </PropertyGroup>
 
@@ -19,8 +19,8 @@
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <DebugType>None</DebugType>
-    <DebugSymbols>false</DebugSymbols>
+    <DebugType>portable</DebugType>
+    <DebugSymbols>true</DebugSymbols>
     <DocumentationFile>bin\Release\AspCore.Microservices.Template.xml</DocumentationFile>
   </PropertyGroup>
   

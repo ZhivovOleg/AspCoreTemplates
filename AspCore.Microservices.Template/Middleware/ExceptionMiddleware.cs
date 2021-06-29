@@ -26,13 +26,13 @@ namespace AspCore.Microservices.Template.Middleware
 				string logsPath = "Logs/ErrorsRequests";
 				if (!Directory.Exists(logsPath))
 					Directory.CreateDirectory(logsPath);
-				StringBuilder recordSb = new StringBuilder();
+				StringBuilder recordSb = new();
 				recordSb.Append(request.Path);
 				recordSb.Append(request.QueryString);
 				recordSb.Append(Environment.NewLine);
 
-				if(request.ContentLength != null && request.ContentLength > 0)
-					using (StreamReader reader = new StreamReader(
+				if(request.ContentLength is > 0)
+					using (StreamReader reader = new(
 						request.Body,
 						encoding: Encoding.UTF8,
 						detectEncodingFromByteOrderMarks: false,
@@ -46,7 +46,7 @@ namespace AspCore.Microservices.Template.Middleware
 						request.Body.Position = 0; // Reset the request body stream position so the next middleware can read it
 					}
 
-				File.WriteAllText($"Logs/ErrorsRequests/request_{currentTime}.json", recordSb.ToString(), Encoding.UTF8);
+				await File.WriteAllTextAsync($"Logs/ErrorsRequests/request_{currentTime}.json", recordSb.ToString(), Encoding.UTF8);
 			}
 			catch (Exception exc)
 			{
