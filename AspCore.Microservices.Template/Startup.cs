@@ -25,15 +25,7 @@ namespace AspCore.Microservices.Template
 		/// <summary>
 		/// Base ctor
 		/// </summary>
-		public Startup()
-		{
-			string aspEnv = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-			if (string.IsNullOrEmpty(aspEnv))
-				aspEnv = Debugger.IsAttached ? "Development" : "Production";
-			IConfigurationBuilder builder = new ConfigurationBuilder()
-				.AddJsonFile(aspEnv == "Development" ? $"appsettings.{aspEnv}.json" : "appsettings.json", false, true);
-			_configuration = builder.Build();
-		}
+		public Startup(IConfiguration configuration) => _configuration = configuration;
 
 		/// <summary>
 		/// This method gets called by the runtime. Use this method to add services to the container
@@ -42,6 +34,7 @@ namespace AspCore.Microservices.Template
 		{
 			AppSettings appSettings = new();
 			_configuration.Bind(appSettings);
+			
 			services
 				.Configure<AppSettings>(_configuration)
 				.AddCors()
