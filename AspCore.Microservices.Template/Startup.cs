@@ -3,13 +3,14 @@ using System.Diagnostics;
 using System.Text.Json;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using AspCore.Microservices.Template.Data;
 using AspCore.Microservices.Template.Dto.AppSettings;
-using AspCore.Microservices.Template.Middleware;
+using AspCore.Microservices.Template.Extentions;
 using Serilog;
 
 namespace AspCore.Microservices.Template
@@ -19,7 +20,6 @@ namespace AspCore.Microservices.Template
 	/// </summary>
     public class Startup
     {
-	    private const string _swaggerApiName = "AspCore.Microservices.Template";
 	    private readonly IConfiguration _configuration;
 	    
 		/// <summary>
@@ -46,10 +46,11 @@ namespace AspCore.Microservices.Template
 				.Configure<AppSettings>(_configuration)
 				.AddCors()
 				.AddDbContext<SharedDbContext>(o => o.UseNpgsql(_configuration.GetSection("Connections").GetValue<string>("SharedDb")))
-				.AddSwagger(_swaggerApiName)
+				.AddSwagger()
 				.AddLogicServices()
 				.AddHealthChecks(appSettings.HealthChecks)
 				.AddDbContext(appSettings.Connections)
+				.AddSupportApiVersioning()
 				.AddControllers()
 				.AddJsonOptions(jsonOptions =>
 				{
@@ -63,13 +64,17 @@ namespace AspCore.Microservices.Template
 		/// <summary>
 		/// This method gets called by the runtime. Use this method to configure the HTTP request pipeline
 		/// </summary>
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(
+			IApplicationBuilder app,
+			IWebHostEnvironment env,
+			ILoggerFactory loggerFactory,
+			IApiVersionDescriptionProvider provider)
         {
 	        try
 	        {
 		        app
 			        .AddBaseFunctions(env, loggerFactory, _configuration)
-					.UseSwaggerWithUi(_swaggerApiName);
+					.UseSwaggerWithUi(provider);
 	        }
 	        catch (Exception exception)
 	        {

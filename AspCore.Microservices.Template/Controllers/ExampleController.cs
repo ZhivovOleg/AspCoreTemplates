@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using AspCore.Microservices.Template.Dto;
 using AspCore.Microservices.Template.Services;
+using Microsoft.AspNetCore.Http;
 
 namespace AspCore.Microservices.Template.Controllers
 {
@@ -9,7 +10,8 @@ namespace AspCore.Microservices.Template.Controllers
 	/// Example controller
 	/// </summary>
 	[ApiController]
-	[Route(nameof(ExampleController))]
+	[ApiVersion("1.0")]
+	[Route("api/v{version:apiVersion}/[controller]")]
 	public class ExampleController : ControllerBase
 	{
 		private readonly IExampleService _exampleService;
@@ -26,6 +28,8 @@ namespace AspCore.Microservices.Template.Controllers
 		[HttpPost]
 		[Produces("application/json")]
 		[Route(nameof(GetExample))]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
 		public async Task<IActionResult> GetExample(ExampleRequestDto requestDto)
 		{
 			ExampleResponseDto result = await _exampleService.GetData(requestDto.Id, requestDto.Guid);
