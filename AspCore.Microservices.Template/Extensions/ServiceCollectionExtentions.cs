@@ -13,10 +13,10 @@ using AspCore.Microservices.Template.Services;
 using AspCore.Microservices.Template.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace AspCore.Microservices.Template.Extentions
+namespace AspCore.Microservices.Template.Extensions
 {
 	/// <summary>
-	/// Extentions for ServiceCollection
+	/// Extensions for ServiceCollection
 	/// </summary>
 	public static class ServiceCollectionExtentions
 	{

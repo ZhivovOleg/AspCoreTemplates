@@ -10,7 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using AspCore.Microservices.Template.Data;
 using AspCore.Microservices.Template.Dto.AppSettings;
-using AspCore.Microservices.Template.Extentions;
+using AspCore.Microservices.Template.Extensions;
 using Serilog;
 
 namespace AspCore.Microservices.Template

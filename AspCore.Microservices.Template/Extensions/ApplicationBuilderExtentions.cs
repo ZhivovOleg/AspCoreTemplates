@@ -12,7 +12,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Serilog;
 
-namespace AspCore.Microservices.Template.Extentions
+namespace AspCore.Microservices.Template.Extensions
 {
 	/// <summary>
 	/// ApplicationBuilder extentions
