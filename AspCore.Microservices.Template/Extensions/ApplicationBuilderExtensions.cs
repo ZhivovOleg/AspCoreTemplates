@@ -17,7 +17,7 @@ namespace AspCore.Microservices.Template.Extensions
 	/// <summary>
 	/// ApplicationBuilder extentions
 	/// </summary>
-	public static class ApplicationBuilderExtentions
+	public static class ApplicationBuilderExtensions
 	{
 		/// <summary>
 		/// Add basic services and middleware. DO NOT CHANGE!
