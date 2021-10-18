@@ -1,5 +1,5 @@
 ﻿# Intro
-шаблон стандартного микросервиса на платформе netcore 3.1, с подготовленными проверками работоспособности (HealthChecks), автодокументируемым API (swagger) и postgres-ready ORM (EFCore)
+шаблон стандартного микросервиса на платформе netcore 5, с подготовленными проверками работоспособности (HealthChecks), автодокументируемым API (swagger) и postgres-ready ORM (EFCore)
 
 # Build
 
