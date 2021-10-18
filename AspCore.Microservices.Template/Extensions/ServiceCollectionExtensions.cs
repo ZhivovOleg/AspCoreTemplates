@@ -18,7 +18,7 @@ namespace AspCore.Microservices.Template.Extensions
 	/// <summary>
 	/// Extensions for ServiceCollection
 	/// </summary>
-	public static class ServiceCollectionExtentions
+	public static class ServiceCollectionExtensions
 	{
 		/// <summary>
 		/// Add swagger 
