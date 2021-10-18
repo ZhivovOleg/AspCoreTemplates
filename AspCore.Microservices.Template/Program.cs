@@ -47,6 +47,14 @@ namespace AspCore.Microservices.Template
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .UseContentRoot(Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location))
+                .ConfigureAppConfiguration((hostingContext, config) =>
+                {
+	                IHostEnvironment env = hostingContext.HostingEnvironment;
+
+	                config
+		                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+		                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
+                })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseKestrel((hostingContext, options) =>
