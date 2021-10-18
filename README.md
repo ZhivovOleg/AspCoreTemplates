@@ -45,7 +45,7 @@ Attention! DO NOT RESTORE, BUILD!
         
     - From your own nuget sourse:
         ```
-        dotnet new -i AspCore.Microservices.Templates --nuget-source <NUGET NAME>
+        dotnet new -i Salt.Microservices.Templates --nuget-source <NUGET NAME>
         ```
     
     - Or from *.nupkg
@@ -65,5 +65,5 @@ Attention! DO NOT RESTORE, BUILD!
 # Remove
 
 ```
-dotnet new -u AspCore.Microservices.Templates
+dotnet new -u Salt.Microservices.Templates
 ```
