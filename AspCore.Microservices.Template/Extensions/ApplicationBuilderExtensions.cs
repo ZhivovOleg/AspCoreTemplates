@@ -1,5 +1,4 @@
-﻿using AspCore.Microservices.Template.Middleware;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -10,6 +9,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Salt.RequestHandler;
 using Serilog;
 
 namespace AspCore.Microservices.Template.Extensions
@@ -39,9 +39,8 @@ namespace AspCore.Microservices.Template.Extensions
 				app.UseHsts();
 				app.UseStatusCodePages();
 			}
-		        
-			if(configuration.GetSection("Logging").GetSection("AdvancedExceptionsHandling") != null)
-				app.UseMiddleware<ExceptionMiddleware>();
+
+			app.AddRequestHandler(RequestHandlerPolicy.HANDLE_ONLY_CRASHED);
 
 			app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod())
 				.UseRouting()
