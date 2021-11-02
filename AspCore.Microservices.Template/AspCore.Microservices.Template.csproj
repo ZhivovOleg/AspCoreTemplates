@@ -57,6 +57,7 @@
   
   <ItemGroup>
     <Compile Remove="Logs\**" />
+    <Content Include=".DevOps\Database\CreateExampleTablesScript.sql" />
     <EmbeddedResource Remove="Logs\**" />
     <None Remove="Logs\**" />
     <Content Remove="Logs\**" />
