@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using Serilog.Sinks.Elasticsearch;
 
 namespace AspCore.Microservices.Template
 {
@@ -13,15 +14,39 @@ namespace AspCore.Microservices.Template
     /// </summary>
     public class Program
     {
+	    private static void ConfigureLogging()
+	    {
+		    try
+		    {
+			    IConfigurationRoot configuration = new ConfigurationBuilder()
+				    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+				    .AddJsonFile(
+					    $"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json",
+					    optional: true)
+				    .Build();
+
+			    Log.Logger = new LoggerConfiguration()
+				    .ReadFrom.Configuration(configuration)
+				    .CreateLogger();
+		    }
+		    catch (Exception exc)
+		    {
+			    Log.Logger = new LoggerConfiguration()
+				    .MinimumLevel.Error()
+				    .WriteTo.File("Logs/{Date}.log")
+				    .CreateLogger();
+		        
+			    Log.Logger.Error(exc, "Error while attaching Serilog to ELK. File logging will be used");
+		    }
+	    }
+	    
         /// <summary>
         /// Start point
         /// </summary>
         public static void Main(string[] args)
         {
-            Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Error()
-                .WriteTo.File($"Logs/{nameof(Program)}.log")
-                .CreateLogger();
+	        ConfigureLogging();
+	        
             try
             {
                 CreateHostBuilder(args).Build().Run();
@@ -67,6 +92,7 @@ namespace AspCore.Microservices.Template
                         options.Limits.RequestHeadersTimeout = TimeSpan.FromMinutes(60);
                     });
                     webBuilder.UseStartup<Startup>();
-                });
+                })
+                .UseSerilog();
     }
 }

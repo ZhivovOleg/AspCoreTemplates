@@ -24,8 +24,6 @@ namespace AspCore.Microservices.Template.Extensions
 		/// </summary>
 		public static IApplicationBuilder AddBaseFunctions(this IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory, IConfiguration configuration)
 		{
-			loggerFactory.AddSerilog().AddFile("Logs/{Date}.log", LogLevel.Error);
-		        
 			if(configuration.GetSection("Kestrel").GetValue<bool>("UseReverseProxy"))
 				app.UseForwardedHeaders(new ForwardedHeadersOptions
 				{
