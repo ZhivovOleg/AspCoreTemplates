@@ -42,7 +42,7 @@ namespace AspCore.Microservices.Template.Extensions
 
 			app.AddRequestHandler(RequestHandlerPolicy.HANDLE_ONLY_CRASHED);
 
-			app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod())
+			app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod())
 				.UseRouting()
 				.UseEndpoints(endpoints =>
 				{
