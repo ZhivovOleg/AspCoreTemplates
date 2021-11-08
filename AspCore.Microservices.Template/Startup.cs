@@ -71,10 +71,6 @@ namespace AspCore.Microservices.Template
 	        }
 	        catch (Exception exception)
 	        {
-		        Log.Logger = new LoggerConfiguration()
-			        .MinimumLevel.Error()
-			        .WriteTo.File($"Logs/{nameof(Startup)}.log")
-			        .CreateLogger();
 		        Log.Error(exception, exception.Message);            
 	        }
         }
