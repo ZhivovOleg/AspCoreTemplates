@@ -1,81 +1,53 @@
-﻿# Intro
-шаблон стандартного микросервиса на платформе netcore 5, с подготовленными проверками работоспособности (HealthChecks), автодокументируемым API (swagger) и postgres-ready ORM (EFCore)
+﻿# Title
+Краткое описание сервиса/библиотеки.
 
-# Build
+# Description
+Подробное описание функционала сервиса/пакета (не более 500 слов).
 
-## Linux (CentOS 8)
-    
-1. 
-    ``` 
-    sudo dnf install dotnet-sdk-3.1 
-    ```
+# Documentation
+Ссылки на Confluense, Jira, касающихся сервиса/пакета, а так же ссылки на OpenAPI(swagger) или Postman Collection.
 
-0. 
-    ``` 
-    cd <full path to repo>
-    ```
+# Requirements
+Краткое описание того, какие другие службы, инструменты и библиотеки необходимы для работы службы, содержащий полный список ВСЕГО, что необходимо для правильной работы сервиса/библиотеки.
 
-0. 
-    ```bash
-    publishDirectory = <Full path to publish directory>
-    appName = <Current app name>;
-    version = date +'%Y.%m%d.%H%M';
-    dotnet clean;
-    dotnet restore;
-    dotnet build -c Release;
-    dotnet publish -c Release -o "$publishDirectory/$appName" --runtime linux-x64 --force -p:Version=$version --no-self-contained;
-    ``` 
- 
-## Windows
-    
-1. Install [aspnet core SDK](https://dotnet.microsoft.com/download/dotnet-core/3.1)
+# Setup
+Пошаговое описание от начала до конца того, что необходимо для настройки и эксплуатации сервиса/библиотеки, предоставляя как можно больше деталей любому новому пользователю, чтобы иметь возможность приступить к работе с сервисом/библиотекой.
 
-0. 
-    ``` 
-    cd <full path to repo>
-    ```
+# Development
+Участие в разработке сервиса/библиотеки
 
-0. 
-    ```powershell
-    [string]$AppName = "AspCore.Microservices.Reports";
-    [string]$publishDirectory = "d:/Release/";
-    [string]$runtime = "win-x64";
-    [string]$version = Get-Date -Format 'yyyy.MMdd.HHmm';
-    dotnet clean;
-    dotnet restore;
-    dotnet build -c Release;
-    dotnet publish -c Release -o "$($publishDirectory)$($AppName)" --runtime $runtime --force -p:Version=$version -p:OutputType=WinExe --no-self-contained;
-    ``` 
+### Requirements
+Краткое описание того, какие другие службы, инструменты и библиотеки необходимы для разработки.
 
-### Production
+### Setup
+Полное пошаговое описание настройки IDE, environment variables, CLI и другого окружения для разработки сервиса/библиотеки.
 
-1. ``` sudo dnf install aspnetcore-runtime-3.1 ```
+# Testing
+Предоставление подробной информации и инструкций по мониторингу и тестированию сервиса/библиотеки, включая любые используемые услуги или инструменты, а также ссылки или отчеты, которые являются частью активного тестирования сервиса/библиотеки.
 
-0. 
+# Configuration
+Краткое описание всех пунктов конфигурации и переменных среды, которые могут быть скорректированы или настроены в рамках сервисных операций, включая столько деталей о значениях по умолчанию или опций, которые дадут различные известные результаты для службы.
 
-# Build and Pack (for linux from windows)
+# Road Map
+Предоставление простого пошагового плана развития сервиса
 
-```
-[string]$AppName = "AspCore.Microservices.Example";
-[string]$publishDirectory = "с:/Release/";
-[string]$runtime = "linux-x64";
-[string]$version = Get-Date -Format 'yyyy.MMdd.HHmm';
-Clear-Host;
-Remove-Item -Path "$($publishDirectory)$($AppName)" -Recurse -Force -ErrorAction Ignore;
-dotnet clean;
-dotnet restore;
-dotnet build -c Release;
-dotnet publish -c Release -o "$($publishDirectory)$($AppName)" --runtime $runtime --force -p:Version=$version --no-self-contained;
-Compress-Archive -Path "$($publishDirectory)$($AppName)/*" -DestinationPath "$($publishDirectory)$($AppName).$($runtime).$($version).zip" -Force;
-Remove-Item -Path "$($publishDirectory)$($AppName)" -Recurse -Force -ErrorAction Ignore;
-```
+### Planed additions
+Запланированные работы
 
-```
-dotnet new -i <full path to template.csproj folder>
-```
+### Current issues
+Известные проблемы
 
-## Uninstall template 
+### Changelog
+Выполненные исправления
 
-```
-dotnet new -u <full path to template.csproj folder>
-```
+# Discussion
+Список релевантных обсуждений в отношении сервиса с заголовком, деталями и любыми ссылками на соответствующие проблемы, сообщения в блоге или другие обновления, которые рассказывают историю работы, проделанной в службе.
+
+# Owners
+Список ответственных с их почтой/корп.аккаунтом:
+- product owner
+- techlead
+- project head
+- backend head
+- frontend head
+etc.

@@ -8,7 +8,7 @@ root = true
 
 # Indentation and spacing
 indent_size = 4
-indent_style = tab
+indent_style = space
 tab_width = 4
 
 # New line preferences
@@ -105,6 +105,9 @@ csharp_style_unused_value_expression_statement_preference = discard_variable:sug
 
 # 'using' directive preferences
 csharp_using_directive_placement = outside_namespace:error
+
+# Namespace options
+csharp_style_namespace_declarations = file_scoped
 
 #### C# Formatting Rules ####
 
@@ -219,7 +222,13 @@ dotnet_naming_style.camel_case.capitalization = camel_case
 
 # User rules
 
+# https://github.com/dotnet/roslyn/issues/33558
+# https://docs.microsoft.com/en-us/visualstudio/code-quality/use-roslyn-analyzers?view=vs-2019#set-rule-severity-in-an-editorconfig-file
+# set severity for build tool 
+dotnet_analyzer_diagnostic.severity = error
+
 dotnet_style_prefer_simplified_boolean_expressions = true:warning
+
 csharp_prefer_simple_using_statement = false:error
 csharp_prefer_static_local_function = false:suggestion
 csharp_style_implicit_object_creation_when_type_is_apparent = true:warning
