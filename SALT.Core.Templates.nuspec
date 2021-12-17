@@ -10,7 +10,7 @@
         <license type="expression">MIT</license>
         <repository type="git" url="https://github.com/ZhivovOleg/AspCoreTemplates.git" branch="master" />
         <dependencies>
-            <group targetFramework=".net5.0" />
+            <group targetFramework=".net6.0" />
         </dependencies>
     </metadata>
 	<files>

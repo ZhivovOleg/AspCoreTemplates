@@ -7,7 +7,7 @@
     
 1. 
     ``` 
-    sudo dnf install dotnet-sdk-3.1 
+    sudo dnf install dotnet-sdk-6.0
     ```
 
 0. 
@@ -28,7 +28,7 @@
  
 ## Windows
     
-1. Install [aspnet core SDK](https://dotnet.microsoft.com/download/dotnet-core/3.1)
+1. Install [aspnet core SDK](https://dotnet.microsoft.com/en-us/download/dotnet/6.0)
 
 0. 
     ``` 

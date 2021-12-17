@@ -1,5 +1,6 @@
 using System;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
@@ -49,7 +50,7 @@ namespace AspCore.Microservices.Template
 					jsonOptions.JsonSerializerOptions.AllowTrailingCommas = true;
 					jsonOptions.JsonSerializerOptions.WriteIndented = true;
 					jsonOptions.JsonSerializerOptions.ReadCommentHandling = JsonCommentHandling.Skip;
-					jsonOptions.JsonSerializerOptions.IgnoreNullValues = true;
+					jsonOptions.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
 				});
 		}
 

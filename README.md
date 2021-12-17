@@ -3,7 +3,7 @@
 
 # Include
 
-1. _AspCore.Microservices.Template_ - шаблон стандартного микросервиса на платформе netcore 5, с подготовленными проверками работоспособности (HealthChecks), автодокументируемым API (swagger) и postgres-ready ORM (EFCore).
+1. _AspCore.Microservices.Template_ - шаблон стандартного микросервиса на платформе netcore 6, с подготовленными проверками работоспособности (HealthChecks), автодокументируемым API (swagger) и postgres-ready ORM (EFCore).
     - install: dotnet new saltwebapi
 
 # Build
