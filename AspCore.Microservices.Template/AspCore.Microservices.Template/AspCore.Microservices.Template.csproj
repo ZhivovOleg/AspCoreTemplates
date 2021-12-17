@@ -7,8 +7,9 @@
     <SelfContained>false</SelfContained>
     <IsTransformWebConfigDisabled>true</IsTransformWebConfigDisabled>
     <AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel>
-    <LangVersion>9</LangVersion>
+    <LangVersion>10</LangVersion>
     <RootNamespace>AspCore.Microservices.Template</RootNamespace>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
