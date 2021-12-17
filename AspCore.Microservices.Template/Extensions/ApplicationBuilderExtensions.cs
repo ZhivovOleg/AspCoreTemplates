@@ -10,7 +10,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Salt.RequestHandler;
-using Serilog;
 
 namespace AspCore.Microservices.Template.Extensions
 {

@@ -36,7 +36,7 @@ namespace AspCore.Microservices.Template
 				    .WriteTo.File("Logs/{Date}.log")
 				    .CreateLogger();
 		        
-			    Log.Logger.Error(exc, "Error while attaching Serilog to ELK. File logging will be used");
+			    Log.Logger.Error(exc, "Error while configure Serilog by appsettings. File logging will be used");
 		    }
 	    }
 	    
