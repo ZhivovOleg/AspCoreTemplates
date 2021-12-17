@@ -13,6 +13,9 @@
             <group targetFramework=".net5.0" />
         </dependencies>
     </metadata>
+	<files>
+        <file src="**" exclude="SALT.Core.Templates.csproj;.gitignore;**\bin\**;**\obj\**;**\.idea\**;**\.git\**;**\.github\**" />
+    </files>
 </package>
 
 <!-- create package (powershell) 
