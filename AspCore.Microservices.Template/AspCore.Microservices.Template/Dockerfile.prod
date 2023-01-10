@@ -1,6 +1,0 @@
-FROM mcr.microsoft.com/dotnet/aspnet:5.0
-RUN dotnet publish -c Release
-COPY bin/Release/net5.0/publish/ AspCore.Microservices.Template/
-WORKDIR /AspCore.Microservices.Template
-ENTRYPOINT ["dotnet", "NetCore.Docker.dll"]
-EXPOSE 9000

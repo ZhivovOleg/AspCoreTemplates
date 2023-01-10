@@ -3,7 +3,7 @@
 
 # Include
 
-1. _AspCore.Microservices.Template_ - шаблон стандартного микросервиса на платформе netcore 6, с подготовленными проверками работоспособности (HealthChecks), автодокументируемым API (swagger) и postgres-ready ORM (EFCore).
+1. _SALT.WebApi.Template_ - шаблон стандартного микросервиса на платформе netcore 6, с подготовленными проверками работоспособности (HealthChecks), автодокументируемым API (swagger) и postgres-ready ORM (EFCore).
     - install: dotnet new saltwebapi
 
 # Build
@@ -27,7 +27,7 @@ Attention! DO NOT RESTORE, BUILD!
 
 0. Push to Nuget
     ```
-    dotnet nuget push .\AspCore.Microservices.Templates.2020.723.1332.nupkg --source <YOUR NUGET SOURCE> --api-key <API_KEY>
+    dotnet nuget push .\SALT.WebApi.Templates.2020.723.1332.nupkg --source <YOUR NUGET SOURCE> --api-key <API_KEY>
     ```
 
 # Using

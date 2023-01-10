@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
     <metadata>
         <id>Salt.Microservices.Templates</id>
-        <version>0.0.1</version>
+        <version>1.0.0</version>
         <description>Simple and Light templates for dotnet</description>
         <authors>Zhivov Oleg A.</authors>
         <owners>Zhivov Oleg A.</owners>
@@ -10,11 +10,11 @@
         <license type="expression">MIT</license>
         <repository type="git" url="https://github.com/ZhivovOleg/AspCoreTemplates.git" branch="master" />
         <dependencies>
-            <group targetFramework=".net6.0" />
+            <group targetFramework="net7.0" />
         </dependencies>
     </metadata>
 	<files>
-        <file src="**" exclude="SALT.Core.Templates.csproj;.gitignore;**\bin\**;**\obj\**;**\.idea\**;**\.git\**;**\.github\**" />
+        <file src="**" exclude="SALT.Core.Templates.csproj;.gitignore;**\bin\**;**\obj\**;**\.idea\**;**\.git\**;**\.github\**;.vscode" />
     </files>
 </package>
 

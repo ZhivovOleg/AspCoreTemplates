@@ -2,26 +2,25 @@ name: .NET
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   workflow_dispatch:
     inputs:
       comment:
-        description: 'Comment'
+        description: "Comment"
         required: false
-        default: ''   
+        default: ""
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 5.0.x
-    - name: Pack
-      run: dotnet pack -c Release -p:NuspecFile=SALT.Core.Templates.nuspec -p:NuspecProperties="version=$(date '+%Y.%m%d.%H%M')" --output .
-    - name: Push to nuget.org
-      run: dotnet nuget push *.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{secrets.NUGET_SECRET}} --skip-duplicate
+      - uses: actions/checkout@v2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 7.x
+      - name: Pack
+        run: dotnet pack -c Release -p:NuspecFile=SALT.Core.Templates.nuspec -p:NuspecProperties="version=$(date '+%Y.%m%d.%H%M')" --output .
+      - name: Push to nuget.org
+        run: dotnet nuget push *.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{secrets.NUGET_SECRET}} --skip-duplicate
