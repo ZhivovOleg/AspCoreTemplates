@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Zhivov Oleg aka Aidaho",
+  "classifications": ["SALT", "WebApi"],
+  "identity": "SALT.WebApi.Template",
+  "name": "SALT template: webApi microservice",
+  "shortName": "saltwebapi",
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  },
+  "preferNameDirectory": true,
+  "sourceName": "SALT.WebApi.Template"
+}
