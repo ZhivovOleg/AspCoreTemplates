@@ -10,14 +10,12 @@ namespace SALT.WebApi.Template.AppCore;
 /// <summary>
 /// Кастомная проверка доступности БД postgres
 /// </summary>
-public class PgSqlCheck : IHealthCheck
+/// <remarks>
+/// DI ctor
+/// </remarks>
+public class PgSqlCheck(string connString) : IHealthCheck
 {
-    private readonly string _connString;
-
-    /// <summary>
-    /// DI ctor
-    /// </summary>
-    public PgSqlCheck(string connString) => _connString = connString;
+    private readonly string _connString = connString;
 
     /// <inheritdoc/>
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)

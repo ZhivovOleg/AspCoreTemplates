@@ -1,25 +1,29 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Globalization;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using SALT.WebApi.Template.AppCore.Dto;
 using SALT.WebApi.Template.Dto;
 using SALT.WebApi.Template.Services;
-using Microsoft.AspNetCore.Http;
-using System;
-using Microsoft.Extensions.Logging;
-using SALT.WebApi.Template.AppCore.Dto;
-using System.Globalization;
-using Newtonsoft.Json;
 
 namespace SALT.WebApi.Template.Controllers;
 
 /// <summary>
 /// Example controller
 /// </summary>
+/// <remarks>
+/// DI ctor
+/// </remarks>
 [ApiController]
 [ApiVersion("1.0")]
 [Route("api/[controller]")]
-public class ExampleController : ControllerBase
+public class ExampleController(IExampleDatabaseService exampleService, ILogger<ExampleController> logger) : ControllerBase
 {
-    private const string _errorTemplate = "Ошибка выполнения {0}";
+    private readonly CompositeFormat _errorTemplate = CompositeFormat.Parse("Ошибка выполнения {0}");
 
     //TIP: For improved performance, use the LoggerMessage delegates instead of calling 'LoggerExtensions.LogError()'
     private static readonly Action<ILogger, Exception> _logError = LoggerMessage.Define(
@@ -28,18 +32,9 @@ public class ExampleController : ControllerBase
         "Ошибка выполнения"
         );
 
-    private readonly IExampleService _exampleService;
+    private readonly IExampleDatabaseService _exampleService = exampleService;
 
-    private readonly ILogger<ExampleController> _logger;
-
-    /// <summary>
-    /// DI ctor
-    /// </summary>
-    public ExampleController(IExampleService exampleService, ILogger<ExampleController> logger)
-    {
-        _exampleService = exampleService;
-        _logger = logger;
-    }
+    private readonly ILogger<ExampleController> _logger = logger;
 
     /// <summary>
     /// Generate example value

@@ -7,12 +7,10 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 namespace SALT.WebApi.Template.Swagger;
 
 /// <inheritdoc />
-public class ConfigureSwaggerOptions : IConfigureOptions<SwaggerGenOptions>
+/// <summary> .ctor </summary>
+public class ConfigureSwaggerOptions(IApiVersionDescriptionProvider provider) : IConfigureOptions<SwaggerGenOptions>
 {
-    private readonly IApiVersionDescriptionProvider _provider;
-
-    /// <summary> .ctor </summary>
-    public ConfigureSwaggerOptions(IApiVersionDescriptionProvider provider) => _provider = provider;
+    private readonly IApiVersionDescriptionProvider _provider = provider;
 
     /// <inheritdoc />
     public void Configure(SwaggerGenOptions options)

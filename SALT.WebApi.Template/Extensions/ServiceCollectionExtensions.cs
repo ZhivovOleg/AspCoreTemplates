@@ -6,9 +6,11 @@ using System.Reflection;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Http.Resilience;
 using Microsoft.Extensions.Options;
 using SALT.WebApi.Template.Data;
 using SALT.WebApi.Template.Dto.AppSettings;
+using SALT.WebApi.Template.Net;
 using SALT.WebApi.Template.Services;
 using SALT.WebApi.Template.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -37,7 +39,7 @@ public static class ServiceCollectionExtensions
     /// Add logic 
     /// </summary>
     public static IServiceCollection AddLogicServices(this IServiceCollection services) =>
-        services.AddTransient<IExampleService, ExampleService>();
+        services.AddTransient<IExampleDatabaseService, ExampleDatabaseService>();
 
     /// <summary>
     /// Add health checks
@@ -89,6 +91,22 @@ public static class ServiceCollectionExtensions
 
             options.SubstituteApiVersionInUrl = true;
         });
+
+        return services;
+    }
+
+    /// <summary>
+    /// Add http clients.
+    /// </summary>
+    public static IServiceCollection AddHttpClients(this IServiceCollection services)
+    {
+        _ = services.ConfigureHttpClientDefaults(builder => builder.AddStandardResilienceHandler());
+
+        IStandardHedgingHandlerBuilder rb = services
+            .AddHttpClient<ExampleHttpClient>(configureClient: static client => client.BaseAddress = new("http://localhost:9010"))
+            .AddStandardHedgingHandler();
+
+        rb.Configure(x => x.Endpoint.)
 
         return services;
     }

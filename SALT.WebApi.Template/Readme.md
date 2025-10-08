@@ -51,3 +51,9 @@
 - backend head
 - frontend head
 etc.
+
+# UpdateLog
+03 october 2025
+- add package [Microsoft.Extensions.Http.Resilience](https://www.nuget.org/packages/Microsoft.Extensions.Http.Resilience)
+    
+    [Создание устойчивых HTTP-приложений: ключевые шаблоны разработки](https://learn.microsoft.com/ru-ru/dotnet/core/resilience/http-resilience?tabs=dotnet-cli)
