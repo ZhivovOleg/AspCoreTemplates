@@ -2,22 +2,25 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
     <metadata>
         <id>Salt.Microservices.Templates</id>
-        <version>1.0.0</version>
+        <version>1.1.0</version>
         <description>Simple and Light templates for dotnet</description>
         <authors>Zhivov Oleg A.</authors>
         <owners>Zhivov Oleg A.</owners>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <license type="expression">MIT</license>
-        <repository type="git" url="https://github.com/ZhivovOleg/AspCoreTemplates.git" branch="master" />
+        <repository type="git" url="https://github.com/ZhivovOleg/AspCoreTemplates.git"
+            branch="master" />
         <dependencies>
-            <group targetFramework="net7.0" />
+            <group targetFramework="net9.0" />
         </dependencies>
     </metadata>
-	<files>
-        <file src="**" exclude="SALT.Core.Templates.csproj;.gitignore;**\bin\**;**\obj\**;**\.idea\**;**\.git\**;**\.github\**;.vscode" />
+    <files>
+        <file src="**"
+            exclude="SALT.Core.Templates.csproj;.gitignore;**\bin\**;**\obj\**;**\.idea\**;**\.git\**;**\.github\**;.vscode" />
     </files>
 </package>
 
 <!-- create package (powershell) 
-dotnet pack -c Release -o .\ -p:NuspecFile=Salt.Core.Templates.nuspec -p:NuspecProperties="version=$(Get-Date -Format 'yyyy.MMdd.HHmm')"
+dotnet pack -c Release -o .\ -p:NuspecFile=Salt.Core.Templates.nuspec
+-p:NuspecProperties="version=$(Get-Date -Format 'yyyy.MMdd.HHmm')"
 -->

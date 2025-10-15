@@ -13,8 +13,5 @@ public class ExampleHttpClient(HttpClient client)
     /// <summary>
     /// Returns an <see cref="IAsyncEnumerable{T}"/> of <see cref="int"/>s.
     /// </summary>
-    public IAsyncEnumerable<int> GetCommentsAsync()
-    {
-        return client.GetFromJsonAsAsyncEnumerable<int>("/int");
-    }
+    public IAsyncEnumerable<int> GetCommentsAsync() => client.GetFromJsonAsAsyncEnumerable<int>("/int");
 }

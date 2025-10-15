@@ -3,24 +3,28 @@
 namespace SALT.WebApi.Template.Dto.AppSettings;
 
 /// <summary>
-/// Application settings 
+/// Application settings.
 /// </summary>
 public class AppSettings
 {
     /// <summary>
-    /// Logging settings
+    /// Logging settings.
     /// </summary>
     public LoggingSettings Logging { get; set; }
     /// <summary>
-    /// Web server setiings
+    /// Web server setiings.
     /// </summary>
     public KestrelSettings Kestrel { get; set; }
     /// <summary>
-    /// Database connections 
+    /// Database connections.
     /// </summary>
     public Dictionary<string, string> Connections { get; set; }
     /// <summary>
-    /// Health checks settings
+    /// Health checks settings.
     /// </summary>
     public HealthChecksSettings HealthChecks { get; set; }
+    /// <summary>
+    /// Http reliability settings.
+    /// </summary>
+    public HttpPolicies HttpPolicies { get; set; }
 }

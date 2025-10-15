@@ -120,7 +120,6 @@ internal sealed class Program
     private static void AddSwagger(IServiceCollection services)
     {
         _ = services
-            .AddVersionedApiExplorer(options => options.GroupNameFormat = "'v'VVV")
             .ConfigureOptions<ConfigureSwaggerOptions>()
             .AddSwaggerGen(options => options.OperationFilter<SwaggerDefaultValues>());
     }

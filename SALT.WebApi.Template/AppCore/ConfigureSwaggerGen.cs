@@ -36,12 +36,15 @@ public class ConfigureSwaggerOptions(IApiVersionDescriptionProvider provider) : 
     {
         OpenApiInfo info = new()
         {
-            Title = "ActiveBC NetController API",
-            Version = description.ApiVersion.ToString()
+            Title = "SALT.WebApi.Template",
+            Version = description.ApiVersion.ToString(),
+            Description = "Base microservice template."
         };
 
         if (description.IsDeprecated)
-            info.Description += " Эта версия устарела";
+        {
+            info.Description += " Warning! API version is depricated.";
+        }
 
         return info;
     }
