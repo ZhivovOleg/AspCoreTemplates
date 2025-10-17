@@ -1,25 +1,25 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using System.Reflection;
-using Microsoft.AspNetCore.Mvc;
-using System.Text.Encodings.Web;
-using System.Text.Unicode;
-using Microsoft.AspNetCore.Mvc.Versioning;
-using Microsoft.AspNetCore.Builder;
 using System;
 using System.IO;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-using SALT.WebApi.Template.Services;
-using SALT.WebApi.Template.Data;
-using SALT.WebApi.Template.AppCore;
-using Microsoft.Extensions.Hosting;
-using Microsoft.AspNetCore.HttpOverrides;
-using Salt.RequestHandler;
+using System.Reflection;
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.Unicode;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Versioning;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Salt.RequestHandler;
+using SALT.WebApi.Template.AppCore;
+using SALT.WebApi.Template.Data;
+using SALT.WebApi.Template.Services;
 
 /// <summary>
 /// Main thread
@@ -49,6 +49,7 @@ internal sealed class Program
         try
         {
             WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+
             builder.Environment.ContentRootPath = Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location);
             IConfigurationRoot configuration = LoadConfiguration(builder);
 
@@ -119,7 +120,6 @@ internal sealed class Program
     private static void AddSwagger(IServiceCollection services)
     {
         _ = services
-            .AddVersionedApiExplorer(options => options.GroupNameFormat = "'v'VVV")
             .ConfigureOptions<ConfigureSwaggerOptions>()
             .AddSwaggerGen(options => options.OperationFilter<SwaggerDefaultValues>());
     }
@@ -129,7 +129,7 @@ internal sealed class Program
         _ = services.AddHealthChecks()
             .AddTypeActivatedCheck<PgSqlCheck>(
                 name: "Storage Connection",
-                args: new string[] { configuration.GetSection("Connections").GetValue<string>("OperationalStorage") }
+                args: [configuration.GetSection("Connections").GetValue<string>("OperationalStorage")]
             );
     }
 
@@ -137,7 +137,7 @@ internal sealed class Program
     {
         _ = services
             .AddDbContext<SharedDbContext>(o => o.UseNpgsql(configuration.GetSection("Connections").GetValue<string>("storage")))
-            .AddTransient<IExampleService, ExampleService>();
+            .AddTransient<IExampleDatabaseService, ExampleDatabaseService>();
     }
 
     private static WebApplication PrepareWebApp(WebApplicationBuilder builder, IConfigurationRoot configuration)

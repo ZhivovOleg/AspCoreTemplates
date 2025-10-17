@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/aspnet:7.0
+FROM mcr.microsoft.com/dotnet/aspnet:latest
 RUN dotnet publish -c Release
 COPY bin/Release/net7.0/publish/ SALT.WebApi.Template/
 WORKDIR /SALT.WebApi.Template

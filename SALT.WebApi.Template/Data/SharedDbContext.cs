@@ -6,13 +6,11 @@ namespace SALT.WebApi.Template.Data;
 /// <summary>
 /// Context for postgres DB
 /// </summary>
-public sealed class SharedDbContext : DbContext
+/// <remarks>
+/// DI ctor
+/// </remarks>
+public sealed class SharedDbContext(DbContextOptions<SharedDbContext> options) : DbContext(options)
 {
-    /// <summary>
-    /// DI ctor
-    /// </summary>
-    public SharedDbContext(DbContextOptions<SharedDbContext> options) : base(options)
-    { }
 
     /// <summary>
     /// models

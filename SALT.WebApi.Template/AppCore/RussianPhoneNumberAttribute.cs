@@ -22,7 +22,7 @@ public class RussianPhoneNumberAttribute : DataTypeAttribute
     /// если итоговых цифр менее 10 выпадает ошибка валидации
     /// </summary>
     public RussianPhoneNumberAttribute() : base(DataType.PhoneNumber) =>
-        base.ErrorMessage = _errorMessage;
+        ErrorMessage = _errorMessage;
 
     /// <inheritdoc />
     public override bool IsValid(object value)
@@ -46,7 +46,7 @@ public class RussianPhoneNumberAttribute : DataTypeAttribute
             return false;
 
         foreach (char c in valueAsString)
-            if (!Char.IsDigit(c))
+            if (!char.IsDigit(c))
                 return false;
 
         return true;

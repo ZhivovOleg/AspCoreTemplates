@@ -234,3 +234,4 @@ csharp_prefer_static_local_function = false:suggestion
 csharp_style_implicit_object_creation_when_type_is_apparent = true:warning
 csharp_style_prefer_switch_expression = true:suggestion
 csharp_style_prefer_pattern_matching = true:warning
+

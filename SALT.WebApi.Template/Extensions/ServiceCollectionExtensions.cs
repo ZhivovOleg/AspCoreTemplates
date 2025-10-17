@@ -3,14 +3,18 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Http.Resilience;
 using Microsoft.Extensions.Options;
+using Polly;
+using SALT.WebApi.Template.AppCore;
 using SALT.WebApi.Template.Data;
 using SALT.WebApi.Template.Dto.AppSettings;
+using SALT.WebApi.Template.Net;
 using SALT.WebApi.Template.Services;
-using SALT.WebApi.Template.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace SALT.WebApi.Template.Extensions;
@@ -37,7 +41,7 @@ public static class ServiceCollectionExtensions
     /// Add logic 
     /// </summary>
     public static IServiceCollection AddLogicServices(this IServiceCollection services) =>
-        services.AddTransient<IExampleService, ExampleService>();
+        services.AddTransient<IExampleDatabaseService, ExampleDatabaseService>();
 
     /// <summary>
     /// Add health checks
@@ -79,17 +83,52 @@ public static class ServiceCollectionExtensions
             // api-supported-versions – list of supported API versions
             // api-deprecated-versions – list of Depricated API versions
             options.ReportApiVersions = true;
-
             // Use versioning by url segment 
             options.ApiVersionReader = new UrlSegmentApiVersionReader();
         }).AddVersionedApiExplorer(options =>
         {
             // Set versioning format from https://github.com/Microsoft/aspnet-api-versioning/wiki/Version-Format#custom-api-version-format-strings
             options.GroupNameFormat = "'v'VV";
-
             options.SubstituteApiVersionInUrl = true;
         });
 
         return services;
+    }
+
+    /// <summary>
+    /// Add http clients.
+    /// <see href="https://habr.com/ru/companies/dododev/articles/503376/" />
+    /// </summary>
+    public static IServiceCollection AddHttpClients(this IServiceCollection services, HttpPolicies httpPolicies)
+    {
+        _ = services
+            .AddResilienceEnricher() // https://learn.microsoft.com/ru-ru/dotnet/core/resilience/?tabs=dotnet-cli#add-resilience-enrichment
+            .AddHttpClient<ExampleHttpClient>(configureClient: static client => client.BaseAddress = new("http://localhost:9010"))
+            .AddResilience(httpPolicies);
+
+        return services;
+    }
+
+    /// <summary>
+    /// Add resilience policies.
+    /// <see href="https://learn.microsoft.com/ru-ru/dotnet/core/resilience/http-resilience"/>
+    /// </summary>
+    private static IHttpStandardResiliencePipelineBuilder AddResilience(this IHttpClientBuilder builder, HttpPolicies httpPolicies)
+    {
+        return builder.AddStandardResilienceHandler(options =>
+            {
+                options.Retry.DisableForUnsafeHttpMethods(); // do not retry post/patch/put/delete
+                options.Retry.BackoffType = DelayBackoffType.Exponential;
+                options.Retry.UseJitter = true;
+                options.Retry.MaxRetryAttempts = httpPolicies.RetriesCount;
+                options.Retry.DelayGenerator = args =>
+                {
+                    TimeSpan? customDelay = TimeSpan.FromSeconds(Math.Pow(2, args.AttemptNumber));
+                    return ValueTask.FromResult(customDelay);
+                };
+
+                options.TotalRequestTimeout = new HttpTimeoutStrategyOptions { Timeout = httpPolicies.OverallTimeout };
+                options.AttemptTimeout = new HttpTimeoutStrategyOptions { Timeout = httpPolicies.TimeoutPerTry };
+            });
     }
 }
