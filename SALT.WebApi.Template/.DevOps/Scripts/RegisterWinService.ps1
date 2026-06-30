@@ -1,8 +1,14 @@
-﻿[string]$currentDir = (Get-Location).Path;
-[string]$exe = $currentDir + "\SALT.WebApi.Example.exe";
-[System.Security.AccessControl.FileSystemSecurity]$acl = Get-Acl $currentDir;
-[System.Security.AccessControl.FileSystemAccessRule]$accessRule = New-Object System.Security.AccessControl.FileSystemAccessRule("System", "Read,Write,ReadAndExecute", "ContainerInherit,ObjectInherit", "None", "Allow");
-$acl.SetAccessRule($accessRule);
-$acl | Set-Acl $currentDir;
+[string]$CurrentDirectory = (Get-Location).Path;
+[string]$AppName = [System.IO.Path]::GetFileName($CurrentDirectory);
+[string]$ExecutablePath = Join-Path $CurrentDirectory "$AppName.exe";
 
-New-Service -Name "SALT.WebApi.Example" -BinaryPathName $exe -Description "Example service" -DisplayName "SALT.WebApi.Example" -StartupType Automatic
+if (-not (Test-Path $ExecutablePath)) {
+    throw "Executable '$ExecutablePath' was not found. Run this script from the published application directory.";
+}
+
+[System.Security.AccessControl.FileSystemSecurity]$Acl = Get-Acl $CurrentDirectory;
+[System.Security.AccessControl.FileSystemAccessRule]$AccessRule = New-Object System.Security.AccessControl.FileSystemAccessRule("System", "Read,Write,ReadAndExecute", "ContainerInherit,ObjectInherit", "None", "Allow");
+$Acl.SetAccessRule($AccessRule);
+$Acl | Set-Acl $CurrentDirectory;
+
+New-Service -Name $AppName -BinaryPathName $ExecutablePath -Description $AppName -DisplayName $AppName -StartupType Automatic;

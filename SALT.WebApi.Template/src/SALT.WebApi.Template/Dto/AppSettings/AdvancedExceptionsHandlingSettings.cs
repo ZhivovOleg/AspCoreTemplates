@@ -1,0 +1,12 @@
+﻿namespace SALT.WebApi.Template.Dto.AppSettings;
+
+/// <summary>
+/// Advanced exceptions handling settings
+/// </summary>
+internal sealed class AdvancedExceptionsHandlingSettings
+{
+    /// <summary>
+    /// Save POST request body as json if errors thrown while process
+    /// </summary>
+    public bool SaveRequestBodyOnErrors { get; set; }
+}

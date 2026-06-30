@@ -1,0 +1,18 @@
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+WORKDIR /src
+
+COPY ["Directory.Build.props", "./"]
+COPY ["Directory.Packages.props", "./"]
+COPY ["nuget.config", "./"]
+COPY ["src/SALT.WebApi.Template/SALT.WebApi.Template.csproj", "src/SALT.WebApi.Template/"]
+RUN dotnet restore "src/SALT.WebApi.Template/SALT.WebApi.Template.csproj"
+
+COPY . .
+RUN dotnet publish "src/SALT.WebApi.Template/SALT.WebApi.Template.csproj" -c Debug -o /app/publish --no-restore
+
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
+WORKDIR /app
+
+COPY --from=build /app/publish .
+EXPOSE 9000
+ENTRYPOINT ["dotnet", "SALT.WebApi.Template.dll"]

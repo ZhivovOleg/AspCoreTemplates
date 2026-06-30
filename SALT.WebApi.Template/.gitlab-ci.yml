@@ -1,0 +1,130 @@
+image: mcr.microsoft.com/dotnet/sdk:10.0
+
+stages:
+  - restore
+  - quality
+  - test
+  - sonar
+  - publish
+  - deploy
+
+variables:
+  DOTNET_CLI_TELEMETRY_OPTOUT: "1"
+  DOTNET_NOLOGO: "1"
+  NUGET_PACKAGES: "$CI_PROJECT_DIR/.nuget/packages"
+  CONFIGURATION: "Release"
+  SOLUTION_PATH: "SALT.WebApi.Template.sln"
+  PROJECT_PATH: "src/SALT.WebApi.Template/SALT.WebApi.Template.csproj"
+  TEST_RESULTS_DIR: "TestResults"
+  COVERAGE_LINE_THRESHOLD: "70"
+
+cache:
+  key: "$CI_COMMIT_REF_SLUG"
+  paths:
+    - .nuget/packages/
+
+restore:
+  stage: restore
+  script:
+    - dotnet restore "$SOLUTION_PATH"
+  artifacts:
+    paths:
+      - "**/obj/project.assets.json"
+      - "**/obj/*.nuget.g.props"
+      - "**/obj/*.nuget.g.targets"
+    expire_in: 1 day
+
+build-and-analyze:
+  stage: quality
+  needs:
+    - job: restore
+      artifacts: true
+  script:
+    - dotnet build "$SOLUTION_PATH" -c "$CONFIGURATION" --no-restore
+
+dependency-audit:
+  stage: quality
+  needs:
+    - job: restore
+      artifacts: true
+  script:
+    - dotnet list "$PROJECT_PATH" package --outdated
+    - dotnet list "$PROJECT_PATH" package --deprecated
+    - dotnet list "$PROJECT_PATH" package --vulnerable --include-transitive
+
+test-and-coverage:
+  stage: test
+  needs:
+    - job: restore
+      artifacts: true
+    - build-and-analyze
+  services:
+    - name: docker:29-dind
+      alias: docker
+  variables:
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
+  script:
+    - rm -rf "$TEST_RESULTS_DIR"
+    - >
+      dotnet test "$SOLUTION_PATH"
+      -c "$CONFIGURATION"
+      --no-restore
+      --logger "trx"
+      --collect:"XPlat Code Coverage"
+      --results-directory "$TEST_RESULTS_DIR"
+      --
+      DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+    - .DevOps/Scripts/check_coverage.sh "$TEST_RESULTS_DIR" "$COVERAGE_LINE_THRESHOLD"
+  artifacts:
+    when: always
+    paths:
+      - "$TEST_RESULTS_DIR/"
+    expire_in: 7 days
+
+sonar:
+  stage: sonar
+  needs:
+    - job: restore
+      artifacts: true
+    - job: test-and-coverage
+      artifacts: true
+  rules:
+    - if: '$SONAR_HOST_URL && $SONAR_TOKEN'
+  script:
+    - dotnet tool restore
+    - >
+      dotnet sonarscanner begin
+      /k:"$CI_PROJECT_PATH_SLUG"
+      /d:sonar.host.url="$SONAR_HOST_URL"
+      /d:sonar.token="$SONAR_TOKEN"
+      /d:sonar.cs.opencover.reportsPaths="$TEST_RESULTS_DIR/**/coverage.opencover.xml"
+    - dotnet build "$SOLUTION_PATH" -c "$CONFIGURATION" --no-restore
+    - dotnet sonarscanner end /d:sonar.token="$SONAR_TOKEN"
+
+publish:
+  stage: publish
+  needs:
+    - job: restore
+      artifacts: true
+    - test-and-coverage
+  script:
+    - dotnet publish "$PROJECT_PATH" -c "$CONFIGURATION" -o publish --no-restore
+    - tar -czf "$CI_PROJECT_NAME.$CI_COMMIT_SHORT_SHA.tar.gz" -C publish .
+  artifacts:
+    paths:
+      - "$CI_PROJECT_NAME.$CI_COMMIT_SHORT_SHA.tar.gz"
+    expire_in: 14 days
+
+deploy:
+  stage: deploy
+  needs:
+    - publish
+  environment:
+    name: production
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master"'
+      when: manual
+  script:
+    - echo "Protect the production environment in GitLab and allow deployments only for Maintainers."
+    - echo "Deploy artifact $CI_PROJECT_NAME.$CI_COMMIT_SHORT_SHA.tar.gz using your platform-specific deployment command."

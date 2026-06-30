@@ -3,7 +3,7 @@
 
 # Include
 
-1. _SALT.WebApi.Template_ - шаблон стандартного микросервиса на платформе netcore 6, с подготовленными проверками работоспособности (HealthChecks), автодокументируемым API (swagger) и postgres-ready ORM (EFCore).
+1. _SALT.WebApi.Template_ - шаблон стандартного микросервиса на платформе .NET 10, с подготовленными проверками работоспособности (HealthChecks), автодокументируемым API (swagger) и postgres-ready ORM (EFCore).
     - install: dotnet new saltwebapi
 
 # Build
@@ -40,17 +40,17 @@ Attention! DO NOT RESTORE, BUILD!
 0. Install templates
     - From nuget.org:
         ```
-        dotnet new -i Salt.Microservices.Templates
+        dotnet new install Salt.Microservices.Templates
         ```
         
     - From your own nuget sourse:
         ```
-        dotnet new -i Salt.Microservices.Templates --nuget-source <NUGET NAME>
+        dotnet new install Salt.Microservices.Templates --nuget-source <NUGET NAME>
         ```
     
     - Or from *.nupkg
         ```
-        dotnet new -i c:\code\nuget-packages\Some.Templates.1.0.0.nupkg
+        dotnet new install c:\code\nuget-packages\Some.Templates.1.0.0.nupkg
         ```
     
     see more [here](https://docs.microsoft.com/ru-ru/dotnet/core/install/templates?pivots=os-windows)
@@ -65,5 +65,5 @@ Attention! DO NOT RESTORE, BUILD!
 # Remove
 
 ```
-dotnet new -u Salt.Microservices.Templates
+dotnet new uninstall Salt.Microservices.Templates
 ```

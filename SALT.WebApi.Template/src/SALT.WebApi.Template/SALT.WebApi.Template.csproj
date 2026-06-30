@@ -1,0 +1,89 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <PublishSingleFile>false</PublishSingleFile>
+    <PublishTrimmed>false</PublishTrimmed>
+    <SelfContained>false</SelfContained>
+    <IsTransformWebConfigDisabled>true</IsTransformWebConfigDisabled>
+    <AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel>
+    <LangVersion>latest</LangVersion>
+    <RootNamespace>SALT.WebApi.Template</RootNamespace>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <RootNamespace>SALT.WebApi.Template</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <DocumentationFile>bin\Debug\SALT.WebApi.Template.xml</DocumentationFile>
+    <DebugType>full</DebugType>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugType>portable</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <DocumentationFile>bin\Release\SALT.WebApi.Template.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AspNetCore.HealthChecks.Network" />
+    <PackageReference Include="AspNetCore.HealthChecks.NpgSql" />
+    <PackageReference Include="AspNetCore.HealthChecks.System" />
+    <PackageReference Include="Asp.Versioning.Mvc" />
+    <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" />
+    <PackageReference Include="Microsoft.Extensions.Http.Resilience" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
+    <PackageReference Include="OpenTelemetry.Exporter.Console" />
+    <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" />
+    <PackageReference Include="OpenTelemetry.Exporter.Prometheus.AspNetCore" />
+    <PackageReference Include="OpenTelemetry.Extensions.Hosting" />
+    <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" />
+    <PackageReference Include="OpenTelemetry.Instrumentation.Http" />
+    <PackageReference Include="OpenTelemetry.Instrumentation.Runtime" />
+    <PackageReference Include="Scalar.AspNetCore" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+    <PackageReference Include="Asp.Versioning.OpenApi" />
+    <PackageReference Include="SonarAnalyzer.CSharp">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Meziantou.Analyzer">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="..\..\.DevOps\test.http">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </AdditionalFiles>
+    <AdditionalFiles Include="..\..\.DevOps\Scripts\publish_for_centos.sh">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </AdditionalFiles>
+    <AdditionalFiles Include="..\..\.DevOps\Scripts\check_coverage.sh">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </AdditionalFiles>
+    <AdditionalFiles Include="..\..\.DevOps\Scripts\check_coverage.ps1">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </AdditionalFiles>
+    <AdditionalFiles Include="..\..\.DevOps\Scripts\publish_for_win.ps1">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </AdditionalFiles>
+    <AdditionalFiles Include="..\..\.DevOps\Scripts\RegisterWinService.ps1">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </AdditionalFiles>
+    <AdditionalFiles Include="..\..\.DevOps\Database\CreateExampleTablesScript.sql">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </AdditionalFiles>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Logs\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="SALT.WebApi.Template.IntegrationTests" />
+  </ItemGroup>
+
+</Project>

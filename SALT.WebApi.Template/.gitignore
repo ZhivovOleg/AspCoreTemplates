@@ -237,7 +237,10 @@ _Pvt_Extensions
 .idea
 
 # Visual Studio Code
-.vscode
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/tasks.json
 
 # ------------- IDEs ----------------
 
@@ -245,7 +248,10 @@ _Pvt_Extensions
 .idea
 
 # vscode
-.vscode
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/tasks.json
 
 # visual studio
 .vs

@@ -15,11 +15,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Setup .NET
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 9.x
+          dotnet-version: 10.x
       - name: Pack
         run: dotnet pack -c Release -p:NuspecFile=SALT.Core.Templates.nuspec -p:NuspecProperties="version=$(date '+%Y.%m%d.%H%M')" --output .
       - name: Push to nuget.org

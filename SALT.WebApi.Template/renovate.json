@@ -1,0 +1,29 @@
+{
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "extends": [
+        "config:recommended"
+    ],
+    "labels": [
+        "dependencies"
+    ],
+    "packageRules": [
+        {
+            "matchManagers": [
+                "nuget"
+            ],
+            "groupName": "NuGet dependencies"
+        },
+        {
+            "matchManagers": [
+                "gitlabci"
+            ],
+            "groupName": "GitLab CI dependencies"
+        },
+        {
+            "matchManagers": [
+                "dockerfile"
+            ],
+            "groupName": "Docker base images"
+        }
+    ]
+}

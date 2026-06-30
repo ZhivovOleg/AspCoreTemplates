@@ -1,0 +1,20 @@
+﻿namespace SALT.WebApi.Template.Dto.AppSettings;
+
+/// <summary>
+/// Health checks settings
+/// </summary>
+internal sealed class HealthChecksSettings
+{
+    /// <summary>
+    /// Check interval in seconds
+    /// </summary>
+    public int IntervalSeconds { get; set; }
+    /// <summary>
+    /// Postgres connections
+    /// </summary>
+    public string[] PgSql { get; set; }
+    /// <summary>
+    /// TCP check
+    /// </summary>
+    public Host[] Tcp { get; set; }
+}

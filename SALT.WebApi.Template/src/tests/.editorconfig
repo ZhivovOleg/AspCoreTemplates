@@ -1,0 +1,12 @@
+# Test-specific analyzer settings.
+# Inherit common rules from ../../.editorconfig.
+root = false
+
+[*.cs]
+
+# Allow BDD-style test names:
+# MethodName_StateUnderTest_ExpectedBehavior
+dotnet_naming_rule.methods_should_be_pascal_case.severity = none
+dotnet_diagnostic.IDE1006.severity = none
+dotnet_diagnostic.S100.severity = none
+dotnet_diagnostic.CA1707.severity = none
