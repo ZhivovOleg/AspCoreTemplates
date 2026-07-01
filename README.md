@@ -3,7 +3,7 @@
 
 # Include
 
-1. _SALT.WebApi.Template_ - шаблон стандартного микросервиса на платформе .NET 10, с подготовленными проверками работоспособности (HealthChecks), автодокументируемым API (swagger) и postgres-ready ORM (EFCore).
+1. _SALT.WebApi.Template_ - шаблон стандартного микросервиса на платформе .NET 10, с подготовленными HealthChecks, Observability, coverage, openApi и postgres-ready ORM (EFCore).
     - install: dotnet new saltwebapi
 
 # Build

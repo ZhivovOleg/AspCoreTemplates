@@ -175,25 +175,18 @@ internal static class ServiceCollectionExtensions
 
         _ = services
             .AddOpenTelemetry()
-
-            // Resource describes this service instance.
-            // Backends use these attributes to group telemetry by service,
-            // environment, version, namespace, and other deployment metadata.
             .ConfigureResource(resource => _ = resource
                 .AddService(
                     serviceName: serviceName,
                     serviceVersion: serviceVersion)
-
-                // Standard OpenTelemetry semantic convention.
-                // Example: Development, Staging, Production.
-                .AddAttributes([
+                .AddAttributes(
+                [
                     new KeyValuePair<string, object>(
-                    "deployment.environment",
-                    environment.EnvironmentName),
-
-                new KeyValuePair<string, object>(
-                    "service.namespace",
-                    settings.ServiceNamespace),
+                        "deployment.environment",
+                        environment.EnvironmentName),
+                    new KeyValuePair<string, object>(
+                        "service.namespace",
+                        settings.ServiceNamespace),
                 ]))
             .AddTracing(settings, serviceName)
             .AddMetrics(settings);
@@ -231,18 +224,12 @@ internal static class ServiceCollectionExtensions
     /// </summary>
     private static OpenTelemetry.OpenTelemetryBuilder AddTracing(this OpenTelemetry.OpenTelemetryBuilder openTelemetryBuilder, ObservabilitySettings settings, string serviceName)
     {
-
         _ = openTelemetryBuilder.WithTracing(tracing =>
         {
             _ = tracing
                 .AddAspNetCoreInstrumentation(options =>
-                    // Records exceptions as span events.
-                    // Useful when investigating failed requests in tracing backend.
                     options.RecordException = true)
                 .AddHttpClientInstrumentation()
-
-                // Add custom ActivitySource names here when business traces appear.
-                // Business code should create ActivitySource with the same name passed to AddSource.
                 .AddSource(serviceName);
 
             if (settings.EnableOtlpExporter)
