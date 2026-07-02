@@ -30,6 +30,9 @@ bld/
 # MSTest test Results
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
+gitleaks-report.json
+semgrep.sarif
+dependency-check-report/
 
 # NUNIT
 *.VisualState.xml

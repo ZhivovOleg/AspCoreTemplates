@@ -67,6 +67,12 @@
     <AdditionalFiles Include="..\..\.DevOps\Scripts\check_coverage.ps1">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </AdditionalFiles>
+    <AdditionalFiles Include="..\..\.DevOps\Scripts\check_before_mr.sh">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </AdditionalFiles>
+    <AdditionalFiles Include="..\..\.DevOps\Scripts\check_before_mr.ps1">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </AdditionalFiles>
     <AdditionalFiles Include="..\..\.DevOps\Scripts\publish_for_win.ps1">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </AdditionalFiles>

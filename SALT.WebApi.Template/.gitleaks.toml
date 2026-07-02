@@ -1,0 +1,72 @@
+title = "SALT service secret scanning rules"
+
+[extend]
+useDefault = true
+
+[[rules]]
+id = "connection-string-inline-password"
+description = "Connection string contains an inline password"
+regex = '''(?i)(Password|Pwd)\s*=\s*([^;"'<\s][^;"']{2,})'''
+secretGroup = 2
+keywords = [
+  "Password",
+  "Pwd",
+]
+
+  [[rules.allowlists]]
+  description = "Allow placeholders and environment variable references"
+  regexTarget = "secret"
+  regexes = [
+    '''^<[^>]+>$''',
+    '''^\$\{?[A-Z0-9_:+.-]+\}?$''',
+  ]
+
+[[rules]]
+id = "appsettings-inline-secret"
+description = "appsettings contains an inline secret-like value"
+path = '''(?i)appsettings.*\.json$'''
+regex = '''(?i)"(password|pwd|token|secret|api[_-]?key|client[_-]?secret)"\s*:\s*"([^"<{\$][^"]{2,})"'''
+secretGroup = 2
+keywords = [
+  "password",
+  "token",
+  "secret",
+  "api",
+]
+
+  [[rules.allowlists]]
+  description = "Allow empty values and placeholders"
+  regexTarget = "secret"
+  regexes = [
+    '''^$''',
+    '''^<[^>]+>$''',
+    '''^\$\{?[A-Z0-9_:+.-]+\}?$''',
+  ]
+
+[[rules]]
+id = "authorization-bearer-token"
+description = "Hardcoded bearer token"
+regex = '''(?i)Authorization\s*[:=]\s*Bearer\s+([A-Za-z0-9._~+/\-]+=*)'''
+secretGroup = 1
+keywords = [
+  "Authorization",
+  "Bearer",
+]
+
+[[allowlists]]
+description = "Ignore generated build and test output"
+paths = [
+  '''(^|/)(bin|obj|TestResults|publish)/''',
+  '''(^|/)\.git/''',
+]
+
+[[allowlists]]
+description = "Allow documentation placeholders"
+regexTarget = "match"
+regexes = [
+  '''<password>''',
+  '''<token>''',
+  '''<project-key>''',
+  '''<sonar-token>''',
+  '''<service-name>''',
+]

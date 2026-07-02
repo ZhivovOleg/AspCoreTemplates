@@ -2,6 +2,7 @@ image: mcr.microsoft.com/dotnet/sdk:10.0
 
 stages:
   - restore
+  - security
   - quality
   - test
   - sonar
@@ -17,6 +18,9 @@ variables:
   PROJECT_PATH: "src/SALT.WebApi.Template/SALT.WebApi.Template.csproj"
   TEST_RESULTS_DIR: "TestResults"
   COVERAGE_LINE_THRESHOLD: "70"
+  GITLEAKS_REPORT: "gitleaks-report.json"
+  SEMGREP_REPORT: "semgrep.sarif"
+  DEPENDENCY_CHECK_REPORT_DIR: "dependency-check-report"
 
 cache:
   key: "$CI_COMMIT_REF_SLUG"
@@ -34,11 +38,62 @@ restore:
       - "**/obj/*.nuget.g.targets"
     expire_in: 1 day
 
+secret-scan:
+  stage: security
+  image:
+    name: zricethezav/gitleaks:latest
+    entrypoint: [""]
+  script:
+    - gitleaks git --redact --verbose --config .gitleaks.toml --report-format json --report-path "$GITLEAKS_REPORT" .
+    - gitleaks dir --redact --config .gitleaks.toml .
+  artifacts:
+    when: always
+    paths:
+      - "$GITLEAKS_REPORT"
+    expire_in: 7 days
+
+semgrep-sast:
+  stage: security
+  image: semgrep/semgrep:latest
+  rules:
+    - if: '$RUN_SEMGREP == "true"'
+  script:
+    - semgrep scan --config p/owasp-top-ten --config p/secrets --sarif --output "$SEMGREP_REPORT" --error
+  artifacts:
+    when: always
+    paths:
+      - "$SEMGREP_REPORT"
+    expire_in: 7 days
+
+owasp-dependency-check:
+  stage: security
+  image:
+    name: owasp/dependency-check:latest
+    entrypoint: [""]
+  rules:
+    - if: '$RUN_OWASP_DEPENDENCY_CHECK == "true"'
+  script:
+    - mkdir -p "$DEPENDENCY_CHECK_REPORT_DIR"
+    - >
+      /usr/share/dependency-check/bin/dependency-check.sh
+      --project "$CI_PROJECT_PATH"
+      --scan .
+      --format HTML
+      --format JSON
+      --out "$DEPENDENCY_CHECK_REPORT_DIR"
+      --failOnCVSS 7
+  artifacts:
+    when: always
+    paths:
+      - "$DEPENDENCY_CHECK_REPORT_DIR/"
+    expire_in: 7 days
+
 build-and-analyze:
   stage: quality
   needs:
     - job: restore
       artifacts: true
+    - secret-scan
   script:
     - dotnet build "$SOLUTION_PATH" -c "$CONFIGURATION" --no-restore
 
@@ -47,6 +102,7 @@ dependency-audit:
   needs:
     - job: restore
       artifacts: true
+    - secret-scan
   script:
     - dotnet list "$PROJECT_PATH" package --outdated
     - dotnet list "$PROJECT_PATH" package --deprecated
