@@ -3,9 +3,12 @@
     <metadata>
         <id>Salt.Microservices.Templates</id>
         <version>2.0.0</version>
+        <title>SALT Microservice Templates</title>
         <description>Modern dotnet new templates for production-ready ASP.NET Core microservices with OpenAPI, observability, security checks, static analysis, CI/CD scripts, and test projects.</description>
         <authors>Zhivov Oleg A.</authors>
         <owners>Zhivov Oleg A.</owners>
+        <readme>README.md</readme>
+        <tags>dotnet-new templates salt aspnetcore webapi microservice opentelemetry openapi testcontainers sonarqube</tags>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <license type="expression">MIT</license>
         <repository type="git" url="https://github.com/ZhivovOleg/AspCoreTemplates.git"
