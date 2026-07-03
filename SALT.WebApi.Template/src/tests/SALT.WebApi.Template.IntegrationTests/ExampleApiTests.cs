@@ -63,18 +63,79 @@ public class ExampleApiTests : IAsyncLifetime
     }
 
     [Fact]
-    public async Task GetExampleData_ReturnsDataFromPostgres()
+    public async Task ControllerGetExampleData_ReturnsDataFromPostgres()
     {
         using HttpClient client = _factory.CreateClient();
         client.DefaultRequestHeaders.Add("api-version", "1.0");
 
-        using HttpResponseMessage response = await client.PostAsJsonAsync(
-            "/api/example/GetExample",
-            new ExampleRequestDto { Id = 1 });
+        using HttpResponseMessage response = await client.GetAsync("/api/example/1");
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
         string body = await response.Content.ReadAsStringAsync();
         Assert.Contains("hello from postgres", body);
+    }
+
+    [Fact]
+    public async Task ControllerPostExampleData_ReturnsPhantomProcessingResult()
+    {
+        using HttpClient client = _factory.CreateClient();
+        client.DefaultRequestHeaders.Add("api-version", "1.0");
+
+        using HttpResponseMessage response = await client.PostAsJsonAsync(
+            "/api/example",
+            new ExampleRequestDto { Id = 1 });
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        ExampleResponseDto? result = await response.Content.ReadFromJsonAsync<ExampleResponseDto>();
+
+        Assert.NotNull(result);
+        Assert.Equal(1, result.Id);
+        Assert.Equal("Example request was processed. No data was persisted.", result.Result);
+    }
+
+    [Fact]
+    public async Task MinimalGetExampleData_ReturnsDataFromPostgres()
+    {
+        using HttpClient client = _factory.CreateClient();
+
+        using HttpResponseMessage response = await client.GetAsync("/api/v1/minimal-example/1");
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        string body = await response.Content.ReadAsStringAsync();
+        Assert.Contains("hello from postgres", body);
+    }
+
+    [Fact]
+    public async Task MinimalPostExampleData_ReturnsPhantomProcessingResult()
+    {
+        using HttpClient client = _factory.CreateClient();
+
+        using HttpResponseMessage response = await client.PostAsJsonAsync(
+            "/api/v1/minimal-example",
+            new ExampleRequestDto { Id = 1 });
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        ExampleResponseDto? result = await response.Content.ReadFromJsonAsync<ExampleResponseDto>();
+
+        Assert.NotNull(result);
+        Assert.Equal(1, result.Id);
+        Assert.Equal("Example request was processed. No data was persisted.", result.Result);
+    }
+
+    [Theory]
+    [InlineData("/api/example/0")]
+    [InlineData("/api/v1/minimal-example/0")]
+    public async Task GetExampleData_WithInvalidId_ReturnsUnprocessableEntity(string url)
+    {
+        using HttpClient client = _factory.CreateClient();
+        client.DefaultRequestHeaders.Add("api-version", "1.0");
+
+        using HttpResponseMessage response = await client.GetAsync(url);
+
+        Assert.Equal(HttpStatusCode.UnprocessableEntity, response.StatusCode);
     }
 }

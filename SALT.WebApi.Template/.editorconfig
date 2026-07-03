@@ -110,7 +110,9 @@ csharp_style_unused_value_expression_statement_preference = discard_variable:sug
 csharp_using_directive_placement = outside_namespace:error
 
 # Namespace options
-csharp_style_namespace_declarations = file_scoped
+csharp_style_namespace_declarations = file_scoped:error
+dotnet_style_namespace_match_folder = true:error
+dotnet_diagnostic.IDE0130.severity = error
 
 #### C# Formatting Rules ####
 
