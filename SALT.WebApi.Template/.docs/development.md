@@ -32,6 +32,20 @@ ConnectionStrings__SharedDb="Host=db;Port=5432;Database=service;Username=service
 }
 ```
 
+## Code Modeling Conventions
+
+Используйте разные типы моделей для разных ролей в приложении:
+
+- EF entities: mutable `class` with `get`/`set`;
+- DTO, request, response and integration contracts: `sealed record` with `init`/`required`;
+- settings/options: `sealed class` with `init` or `set` properties and options validation.
+
+EF entities участвуют в object tracking, relationship fixup, change detection и миграциях. Для них `record` обычно добавляет неверную семантику value equality и может запутывать работу с изменяемым состоянием.
+
+DTO и публичные контракты, наоборот, хорошо подходят для `sealed record`: они value-like, сериализуются в API, удобны для сравнения в тестах и явно показывают обязательные поля через `required`.
+
+Settings/options лучше оставлять классами. `ConfigurationBinder`, `IOptions<T>` и `ValidateOnStart()` с ними работают максимально предсказуемо, а `init`/`set` properties уже дают достаточно строгий контракт без лишней record-семантики.
+
 ## Build
 
 Локальная сборка должна проходить без warning/error. Анализаторы Roslyn и Sonar подключены к build pipeline, поэтому предупреждения анализаторов считаются ошибками.

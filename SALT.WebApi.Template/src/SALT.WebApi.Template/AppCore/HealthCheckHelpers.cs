@@ -44,7 +44,8 @@ public static class HealthCheckHelpers
             jsonWriter.WriteEndObject();
         }
 
-        jsonWriter.WriteEndObject();
+        jsonWriter.WriteEndObject(); // закрывает results
+        jsonWriter.WriteEndObject(); // закрывает root
         await jsonWriter.FlushAsync(context.RequestAborted);
 
         await context.Response

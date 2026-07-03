@@ -18,6 +18,20 @@ warning: in the working copy of '<file>', CRLF will be replaced by LF the next t
 
 If a newly created or edited file has LF endings while the repository expects CRLF, convert only the files changed by the agent to CRLF.
 
+## Code Modeling Conventions
+
+Use model types according to their role:
+
+- EF entities: mutable `class` with `get`/`set`.
+- DTO, request, response, and integration contracts: `sealed record` with `init`/`required`.
+- Settings/options: `sealed class` with `init` or `set` properties and options validation.
+
+Do not convert EF entities to records. EF entities participate in object tracking, relationship fixup, change detection, and migrations; record value equality is usually the wrong semantic model there.
+
+Prefer `sealed record` for public API DTOs and contract models because they are value-like, serialize cleanly, and work well in tests.
+
+Keep settings/options as classes for predictable `ConfigurationBinder`, `IOptions<T>`, and `ValidateOnStart()` behavior.
+
 Use targeted verification by default:
 
 ```bash
