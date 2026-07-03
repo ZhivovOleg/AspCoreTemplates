@@ -44,7 +44,7 @@ public sealed partial class GlobalExceptionHandler(
                 Detail = _environment.IsDevelopment() ? exception.Message : null,
                 Instance = httpContext.Request.Path,
             },
-        }).ConfigureAwait(false);
+        });
     }
 
     [LoggerMessage(

@@ -10,9 +10,10 @@ internal sealed class LoggingSettings
     /// <summary>
     /// Levels for loggers
     /// </summary>
-    public Dictionary<string, string> LogLevel { get; set; }
+    public Dictionary<string, string> LogLevel { get; init; } = [];
+
     /// <summary>
     /// Advanced exceptions handling settings
     /// </summary>
-    public AdvancedExceptionsHandlingSettings AdvancedExceptionsHandling { get; set; }
+    public AdvancedExceptionsHandlingSettings AdvancedExceptionsHandling { get; init; } = new();
 }

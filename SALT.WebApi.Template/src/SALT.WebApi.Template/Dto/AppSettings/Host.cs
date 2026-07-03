@@ -8,13 +8,15 @@ internal sealed class Host
     /// <summary>
     /// Full name or IP
     /// </summary>
-    public string Name { get; set; }
+    public string Name { get; init; } = string.Empty;
+
     /// <summary>
     /// Port
     /// </summary>
-    public int Port { get; set; }
+    public int Port { get; init; }
+
     /// <summary>
     /// Short description
     /// </summary>
-    public string Descsription { get; set; }
+    public string Description { get; init; } = string.Empty;
 }

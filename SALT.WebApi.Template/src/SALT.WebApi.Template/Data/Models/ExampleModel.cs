@@ -21,11 +21,11 @@ public class ExampleModel
     /// name
     /// </summary>
     [Column("name", TypeName = "varchar(100)")]
-    public string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
 
     /// <summary>
     /// body
     /// </summary>
     [Column("bytes", TypeName = "bytea")]
-    public string Bytes { get; set; }
+    public string Bytes { get; set; } = string.Empty;
 }

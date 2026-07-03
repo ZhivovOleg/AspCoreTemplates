@@ -1,7 +1,6 @@
 using System;
 using System.Diagnostics;
 using System.Globalization;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -24,23 +23,19 @@ public class PgSqlCheck(string connString) : IHealthCheck
     {
         try
         {
-            NpgsqlConnection conn = new(_connString);
-            await using (ConfiguredAsyncDisposable _ = conn.ConfigureAwait(false))
-            {
-                NpgsqlCommand cmd = new("SELECT version()", conn);
-                await using (ConfiguredAsyncDisposable __ = cmd.ConfigureAwait(false))
-                {
-                    Stopwatch sw = new();
-                    sw.Start();
-                    await conn.OpenAsync(cancellationToken).ConfigureAwait(false);
-                    string result = (await cmd.ExecuteScalarAsync(cancellationToken).ConfigureAwait(false)).ToString();
-                    sw.Stop();
-                    return new HealthCheckResult(
-                        HealthStatus.Healthy,
-                        $"Version: {result}; Connection and request timeout: {sw.ElapsedMilliseconds.ToString(CultureInfo.InvariantCulture)}ms",
-                        exception: null);
-                }
-            }
+            await using NpgsqlConnection conn = new(_connString);
+            await using NpgsqlCommand cmd = new("SELECT version()", conn);
+
+            Stopwatch sw = new();
+            sw.Start();
+            await conn.OpenAsync(cancellationToken);
+            object? scalarResult = await cmd.ExecuteScalarAsync(cancellationToken);
+            string result = Convert.ToString(scalarResult, CultureInfo.InvariantCulture) ?? "unknown";
+            sw.Stop();
+            return new HealthCheckResult(
+                HealthStatus.Healthy,
+                $"Version: {result}; Connection and request timeout: {sw.ElapsedMilliseconds.ToString(CultureInfo.InvariantCulture)}ms",
+                exception: null);
         }
         catch (Exception exc)
         {

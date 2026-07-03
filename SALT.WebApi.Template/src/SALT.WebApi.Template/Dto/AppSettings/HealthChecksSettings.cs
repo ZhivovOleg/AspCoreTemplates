@@ -8,13 +8,15 @@ internal sealed class HealthChecksSettings
     /// <summary>
     /// Check interval in seconds
     /// </summary>
-    public int IntervalSeconds { get; set; }
+    public int IntervalSeconds { get; init; } = 60;
+
     /// <summary>
     /// Postgres connections
     /// </summary>
-    public string[] PgSql { get; set; }
+    public string[] PgSql { get; init; } = [];
+
     /// <summary>
     /// TCP check
     /// </summary>
-    public Host[] Tcp { get; set; }
+    public Host[] Tcp { get; init; } = [];
 }

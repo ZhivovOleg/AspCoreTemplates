@@ -8,6 +8,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using OpenTelemetry.Logs;
 using SALT.WebApi.Template.AppCore;
+using SALT.WebApi.Template.Dto.AppSettings;
+using SALT.WebApi.Template.Endpoints;
 using Scalar.AspNetCore;
 
 namespace SALT.WebApi.Template.Extensions;
@@ -19,9 +21,13 @@ internal static class AppBuilderExtensions
 {
     internal static void ConfigureWebServer(this ConfigureWebHostBuilder builder, IConfigurationRoot configuration)
     {
-        TimeSpan keepAliveTimeout = TimeSpan.FromSeconds(configuration.GetSection("Kestrel").GetValue<int>("KeepAliveTimeout"));
-        TimeSpan requestHeadersTimeout = TimeSpan.FromSeconds(configuration.GetSection("Kestrel").GetValue<int>("RequestHeadersTimeout"));
-        int port = configuration.GetSection("Kestrel").GetValue<int>("Port");
+        KestrelSettings settings = configuration
+            .GetSection(KestrelSettings.SectionName)
+            .Get<KestrelSettings>()
+            ?? new KestrelSettings();
+
+        TimeSpan keepAliveTimeout = TimeSpan.FromSeconds(settings.KeepAliveTimeout);
+        TimeSpan requestHeadersTimeout = TimeSpan.FromSeconds(settings.RequestHeadersTimeout);
 
         _ = builder.UseKestrel((context, kestrelServerOptions) =>
         {
@@ -29,18 +35,18 @@ internal static class AppBuilderExtensions
             kestrelServerOptions.Limits.MaxRequestBodySize = null;
             kestrelServerOptions.Limits.KeepAliveTimeout = keepAliveTimeout;
             kestrelServerOptions.Limits.RequestHeadersTimeout = requestHeadersTimeout;
-            kestrelServerOptions.ListenAnyIP(port);
+            kestrelServerOptions.ListenAnyIP(settings.Port);
         });
     }
 
     internal static WebApplication MapEndpoints(this WebApplication webApp)
     {
         _ = webApp
-            .UseCors(options => options.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod())
             .UseHttpsRedirection()
             .UseAuthorization();
 
         _ = webApp.MapControllers();
+        _ = webApp.MapExampleMinimalEndpoints();
 
         _ = webApp.MapHealthChecks("/healthz", new HealthCheckOptions { ResponseWriter = HealthCheckHelpers.WriteJsonResponse });
 
@@ -49,7 +55,7 @@ internal static class AppBuilderExtensions
 
     internal static WebApplication UseMiddleware(this WebApplication webApp, IConfigurationRoot configuration)
     {
-        if (configuration.GetSection("Kestrel").GetValue<bool>("UseReverseProxy"))
+        if (configuration.GetSection(KestrelSettings.SectionName).GetValue<bool>(nameof(KestrelSettings.UseReverseProxy)))
             _ = webApp.UseForwardedHeaders(new ForwardedHeadersOptions
             {
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto,
@@ -67,7 +73,13 @@ internal static class AppBuilderExtensions
         else
             _ = webApp.UseHsts().UseStatusCodePages();
 
-        _ = webApp.MapPrometheusScrapingEndpoint();
+        ObservabilitySettings observabilitySettings = configuration
+            .GetSection(ObservabilitySettings.SectionName)
+            .Get<ObservabilitySettings>()
+            ?? new ObservabilitySettings();
+
+        if (observabilitySettings.EnablePrometheusExporter)
+            _ = webApp.MapPrometheusScrapingEndpoint();
 
         return webApp;
     }

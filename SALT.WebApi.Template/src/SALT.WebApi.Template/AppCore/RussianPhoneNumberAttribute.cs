@@ -26,9 +26,9 @@ public class RussianPhoneNumberAttribute : DataTypeAttribute
         ErrorMessage = _errorMessage;
 
     /// <inheritdoc />
-    public override bool IsValid(object value)
+    public override bool IsValid(object? value)
     {
-        string valueAsString = value as string;
+        string? valueAsString = value as string;
 
         if (string.IsNullOrWhiteSpace(valueAsString))
             return false;

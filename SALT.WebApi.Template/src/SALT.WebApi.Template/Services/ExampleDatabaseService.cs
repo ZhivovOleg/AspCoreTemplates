@@ -2,11 +2,9 @@
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using SALT.WebApi.Template.Data;
 using SALT.WebApi.Template.Data.Models;
 using SALT.WebApi.Template.Dto;
-using SALT.WebApi.Template.Dto.AppSettings;
 
 namespace SALT.WebApi.Template.Services;
 
@@ -16,10 +14,9 @@ namespace SALT.WebApi.Template.Services;
 /// <remarks>
 /// DI ctor
 /// </remarks>
-internal sealed partial class ExampleDatabaseService(IOptions<ApplicationSettings> appSettings, ILogger<ExampleDatabaseService> logger, SharedDbContext sharedDbContext) : IExampleDatabaseService
+internal sealed partial class ExampleDatabaseService(ILogger<ExampleDatabaseService> logger, SharedDbContext sharedDbContext) : IExampleDatabaseService
 {
     private readonly ILogger<ExampleDatabaseService> _logger = logger;
-    private readonly ApplicationSettings _appSettings = appSettings.Value;
     private readonly SharedDbContext _sharedDbContext = sharedDbContext;
 
     [LoggerMessage(
@@ -35,11 +32,10 @@ internal sealed partial class ExampleDatabaseService(IOptions<ApplicationSetting
     {
         try
         {
-            ExampleModel model = await _sharedDbContext.ExampleModels
-                .SingleOrDefaultAsync(m => m.Id == id)
-                .ConfigureAwait(false);
+            ExampleModel? model = await _sharedDbContext.ExampleModels
+                .SingleOrDefaultAsync(m => m.Id == id);
             return model == null
-                ? new ExampleResponseDto { Id = 0, Result = $"no model in db {_appSettings.ConnectionStrings["SharedDb"]}" }
+                ? new ExampleResponseDto { Id = 0, Result = "No model found in shared database." }
                 : new ExampleResponseDto { Id = model.Id, Result = model.Bytes };
         }
         catch (Exception exc)

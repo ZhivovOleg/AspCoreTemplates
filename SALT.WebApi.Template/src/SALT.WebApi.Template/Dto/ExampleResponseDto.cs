@@ -3,14 +3,15 @@
 /// <summary>
 /// Example response DTO
 /// </summary>
-public class ExampleResponseDto
+public sealed record ExampleResponseDto
 {
     /// <summary>
     /// ID
     /// </summary>
-    public int Id { get; set; }
+    public int Id { get; init; }
+
     /// <summary>
     /// string result
     /// </summary>
-    public string Result { get; set; }
+    public required string Result { get; init; }
 }

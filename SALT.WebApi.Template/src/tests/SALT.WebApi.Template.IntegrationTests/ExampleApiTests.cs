@@ -1,9 +1,11 @@
 ﻿using System.Net;
+using System.Net.Http.Json;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SALT.WebApi.Template.Data;
 using SALT.WebApi.Template.Data.Models;
+using SALT.WebApi.Template.Dto;
 using Testcontainers.PostgreSql;
 
 namespace SALT.WebApi.Template.IntegrationTests;
@@ -64,8 +66,11 @@ public class ExampleApiTests : IAsyncLifetime
     public async Task GetExampleData_ReturnsDataFromPostgres()
     {
         using HttpClient client = _factory.CreateClient();
+        client.DefaultRequestHeaders.Add("api-version", "1.0");
 
-        using HttpResponseMessage response = await client.GetAsync("/api/v1/example/1");
+        using HttpResponseMessage response = await client.PostAsJsonAsync(
+            "/api/example/GetExample",
+            new ExampleRequestDto { Id = 1 });
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 

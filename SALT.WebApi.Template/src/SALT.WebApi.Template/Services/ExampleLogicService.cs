@@ -6,7 +6,7 @@ namespace SALT.WebApi.Template.Services;
 public class ExampleLogicService : IExampleLogicService
 {
     /// <inheritdoc />
-    public double SumAnyNumericValues(object a, object b)
+    public double SumAnyNumericValues(object? a, object? b)
     {
         double ad = TryParseDouble(a);
         double bd = TryParseDouble(b);
@@ -20,7 +20,7 @@ public class ExampleLogicService : IExampleLogicService
         };
     }
 
-    private static double TryParseDouble(object val) =>
+    private static double TryParseDouble(object? val) =>
         val switch
         {
             byte value => value,

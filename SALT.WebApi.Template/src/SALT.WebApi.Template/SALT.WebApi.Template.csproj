@@ -8,16 +8,15 @@
     <IsTransformWebConfigDisabled>true</IsTransformWebConfigDisabled>
     <AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel>
     <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
     <RootNamespace>SALT.WebApi.Template</RootNamespace>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
-    <RootNamespace>SALT.WebApi.Template</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
     <DocumentationFile>bin\Debug\SALT.WebApi.Template.xml</DocumentationFile>
-    <DebugType>full</DebugType>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
@@ -52,36 +51,6 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <AdditionalFiles Include="..\..\.DevOps\test.http">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </AdditionalFiles>
-    <AdditionalFiles Include="..\..\.DevOps\Scripts\publish_for_centos.sh">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </AdditionalFiles>
-    <AdditionalFiles Include="..\..\.DevOps\Scripts\check_coverage.sh">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </AdditionalFiles>
-    <AdditionalFiles Include="..\..\.DevOps\Scripts\check_coverage.ps1">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </AdditionalFiles>
-    <AdditionalFiles Include="..\..\.DevOps\Scripts\check_before_mr.sh">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </AdditionalFiles>
-    <AdditionalFiles Include="..\..\.DevOps\Scripts\check_before_mr.ps1">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </AdditionalFiles>
-    <AdditionalFiles Include="..\..\.DevOps\Scripts\publish_for_win.ps1">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </AdditionalFiles>
-    <AdditionalFiles Include="..\..\.DevOps\Scripts\RegisterWinService.ps1">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </AdditionalFiles>
-    <AdditionalFiles Include="..\..\.DevOps\Database\CreateExampleTablesScript.sql">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </AdditionalFiles>
   </ItemGroup>
 
   <ItemGroup>

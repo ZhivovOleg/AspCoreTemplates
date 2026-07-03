@@ -8,16 +8,20 @@ namespace SALT.WebApi.Template.Dto.AppSettings;
 /// </summary>
 internal sealed class HttpPolicies
 {
+    public const string SectionName = "HttpPolicies";
+
     /// <summary>
     /// Total operation timeout, seconds.
     /// </summary>
-    public TimeSpan OverallTimeout { get; set; } = TimeSpan.FromSeconds(10);
+    public TimeSpan OverallTimeout { get; init; } = TimeSpan.FromSeconds(10);
+
     /// <summary>
     /// Single try tiomeout, seconds.
     /// </summary>
-    public TimeSpan TimeoutPerTry { get; set; } = TimeSpan.FromSeconds(3);
+    public TimeSpan TimeoutPerTry { get; init; } = TimeSpan.FromSeconds(3);
+
     /// <summary>
     /// How many retries per operation.
     /// </summary>
-    public int RetriesCount { get; set; } = 10;
+    public int RetriesCount { get; init; } = 10;
 }

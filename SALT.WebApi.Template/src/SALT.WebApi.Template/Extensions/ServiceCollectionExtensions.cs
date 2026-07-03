@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -38,6 +39,49 @@ internal static class ServiceCollectionExtensions
     {
         _ = services.Configure<ApplicationSettings>(configuration);
         _ = services.AddTransient<IExampleDatabaseService, ExampleDatabaseService>();
+        _ = services.AddTransient<IExampleLogicService, ExampleLogicService>();
+        return services;
+    }
+
+    internal static IServiceCollection AddConfigurationOptions(this IServiceCollection services)
+    {
+        _ = services
+            .AddOptions<ApplicationSettings>()
+            .BindConfiguration(string.Empty)
+            .ValidateOnStart();
+
+        _ = services
+            .AddOptions<KestrelSettings>()
+            .BindConfiguration(KestrelSettings.SectionName)
+            .Validate(settings => settings.Port > 0, "Kestrel:Port must be greater than zero.")
+            .Validate(settings => settings.KeepAliveTimeout > 0, "Kestrel:KeepAliveTimeout must be greater than zero.")
+            .Validate(settings => settings.RequestHeadersTimeout > 0, "Kestrel:RequestHeadersTimeout must be greater than zero.")
+            .ValidateOnStart();
+
+        _ = services
+            .AddOptions<CorsSettings>()
+            .BindConfiguration(CorsSettings.SectionName)
+            .Validate(
+                settings => settings.AllowedOrigins.All(static origin => Uri.IsWellFormedUriString(origin, UriKind.Absolute)),
+                "Cors:AllowedOrigins must contain absolute URLs.")
+            .ValidateOnStart();
+
+        _ = services
+            .AddOptions<HttpPolicies>()
+            .BindConfiguration(HttpPolicies.SectionName)
+            .Validate(settings => settings.OverallTimeout > TimeSpan.Zero, "HttpPolicies:OverallTimeout must be greater than zero.")
+            .Validate(settings => settings.TimeoutPerTry > TimeSpan.Zero, "HttpPolicies:TimeoutPerTry must be greater than zero.")
+            .Validate(settings => settings.TimeoutPerTry <= settings.OverallTimeout, "HttpPolicies:TimeoutPerTry must not exceed OverallTimeout.")
+            .Validate(settings => settings.RetriesCount >= 0, "HttpPolicies:RetriesCount must be greater than or equal to zero.")
+            .ValidateOnStart();
+
+        _ = services
+            .AddOptions<ObservabilitySettings>()
+            .BindConfiguration(ObservabilitySettings.SectionName)
+            .Validate(settings => !string.IsNullOrWhiteSpace(settings.ServiceName), "Observability:ServiceName is required.")
+            .Validate(settings => !string.IsNullOrWhiteSpace(settings.ServiceNamespace), "Observability:ServiceNamespace is required.")
+            .ValidateOnStart();
+
         return services;
     }
 
@@ -60,7 +104,7 @@ internal static class ServiceCollectionExtensions
     /// </summary>
     internal static IServiceCollection AddHttpClients(this IServiceCollection services, IConfigurationRoot configuration)
     {
-        HttpPolicies policies = configuration.GetSection("HttpPolicies").Get<HttpPolicies>() ?? new HttpPolicies();
+        HttpPolicies policies = configuration.GetSection(HttpPolicies.SectionName).Get<HttpPolicies>() ?? new HttpPolicies();
         _ = services
             .AddResilienceEnricher() // https://learn.microsoft.com/ru-ru/dotnet/core/resilience/?tabs=dotnet-cli#add-resilience-enrichment
             .AddHttpClient<ExampleHttpClient>(configureClient: static client => client.BaseAddress = new("http://localhost:9010"))
@@ -71,10 +115,19 @@ internal static class ServiceCollectionExtensions
 
     internal static IServiceCollection AddHealthChecks(this IServiceCollection services, IConfigurationRoot configuration)
     {
-        Dictionary<string, string> connections = configuration.GetValue<Dictionary<string, string>>("ConnectionStrings");
+        Dictionary<string, string> connections = configuration
+            .GetSection("ConnectionStrings")
+            .Get<Dictionary<string, string>>()
+            ?? [];
+
+        IHealthChecksBuilder checks = services.AddHealthChecks();
+
         foreach (KeyValuePair<string, string> conn in connections)
         {
-            _ = services.AddHealthChecks()
+            if (string.IsNullOrWhiteSpace(conn.Value))
+                continue;
+
+            _ = checks
                 .AddTypeActivatedCheck<PgSqlCheck>(
                     name: conn.Key,
                     args: [conn.Value]
@@ -130,9 +183,6 @@ internal static class ServiceCollectionExtensions
                 .Get<CorsSettings>()
                 ?? new CorsSettings();
 
-        if (settings.AllowedOrigins.Length == 0)
-            return services;
-
         _ = services.AddCors(options => options.AddPolicy(_corsPolicyName, policy =>
             {
                 if (settings.AllowedOrigins.Length > 0)
@@ -171,7 +221,8 @@ internal static class ServiceCollectionExtensions
             .Assembly
             .GetName()
             .Version?
-            .ToString();
+            .ToString()
+            ?? "unknown";
 
         _ = services
             .AddOpenTelemetry()

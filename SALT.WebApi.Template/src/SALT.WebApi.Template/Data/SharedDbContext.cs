@@ -15,5 +15,5 @@ public sealed class SharedDbContext(DbContextOptions<SharedDbContext> options) :
     /// <summary>
     /// models
     /// </summary>
-    public DbSet<ExampleModel> ExampleModels { get; set; }
+    public DbSet<ExampleModel> ExampleModels => Set<ExampleModel>();
 }

@@ -72,7 +72,7 @@ public class OpenApiContractTests
         {
             string projectFile = Path.Combine(
                 directory.FullName,
-                "SALT.WebApi.Template.Contracts.csproj");
+                "SALT.WebApi.Template.ContractTests.csproj");
 
             if (File.Exists(projectFile))
                 return directory.FullName;

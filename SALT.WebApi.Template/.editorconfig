@@ -6,6 +6,9 @@ root = true
 
 #### Core EditorConfig Options ####
 
+# ASP.NET Core service code does not need library-style ConfigureAwait(false) noise.
+dotnet_diagnostic.MA0004.severity = none
+
 # Indentation and spacing
 indent_size = 4
 indent_style = space
@@ -236,4 +239,3 @@ csharp_style_prefer_switch_expression = true:suggestion
 csharp_style_prefer_pattern_matching = true:warning
 
 dotnet_diagnostic.MA0197.severity = none
-

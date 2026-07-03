@@ -1,6 +1,4 @@
 using System;
-using System.IO;
-using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -33,15 +31,16 @@ internal sealed class Program
     {
         WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-        builder.Environment.ContentRootPath = Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location);
         IConfigurationRoot configuration = LoadConfiguration(builder);
 
         _ = builder.Services
+            .AddConfigurationOptions()
             .AddCorsConfiguration(configuration)
             .AddAndConfigureVersionedApi()
             .AddHealthChecks(configuration)
             .AddDbContext(configuration)
             .AddHttpClients(configuration)
+            .AddObservability(configuration, builder.Environment)
             .AddBusinessLogic(configuration);
 
         builder.WebHost.ConfigureWebServer(configuration);

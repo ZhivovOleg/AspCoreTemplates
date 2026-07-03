@@ -1,12 +1,15 @@
-﻿namespace SALT.WebApi.Template.Dto;
+﻿using System.Text.Json.Serialization;
+
+namespace SALT.WebApi.Template.Dto;
 
 /// <summary>
 /// Example request DTO
 /// </summary>
-public class ExampleRequestDto
+public sealed record ExampleRequestDto
 {
     /// <summary>
     /// ID
     /// </summary>
-    public required int Id { get; set; }
+    [JsonRequired]
+    public int Id { get; init; }
 }

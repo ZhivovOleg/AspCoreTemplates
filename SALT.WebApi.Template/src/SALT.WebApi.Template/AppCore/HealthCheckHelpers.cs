@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -22,36 +21,33 @@ public static class HealthCheckHelpers
         context.Response.ContentType = "application/json; charset=utf-8";
         JsonWriterOptions options = new() { Indented = true };
         using MemoryStream ms = new();
-        Utf8JsonWriter jsonWriter = new(ms, options);
-        await using (ConfiguredAsyncDisposable _ = jsonWriter.ConfigureAwait(false))
+        await using Utf8JsonWriter jsonWriter = new(ms, options);
+
+        jsonWriter.WriteStartObject();
+        jsonWriter.WriteString("status", healthReport.Status.ToString());
+        jsonWriter.WriteStartObject("results");
+
+        foreach (KeyValuePair<string, HealthReportEntry> hcr in healthReport.Entries)
         {
-            jsonWriter.WriteStartObject();
-            jsonWriter.WriteString("status", healthReport.Status.ToString());
-            jsonWriter.WriteStartObject("results");
+            jsonWriter.WriteStartObject(hcr.Key);
+            jsonWriter.WriteString("status", hcr.Value.Status.ToString());
+            jsonWriter.WriteString("description", hcr.Value.Description);
+            jsonWriter.WriteStartObject("data");
 
-            foreach (KeyValuePair<string, HealthReportEntry> hcr in healthReport.Entries)
+            foreach (KeyValuePair<string, object> item in hcr.Value.Data)
             {
-                jsonWriter.WriteStartObject(hcr.Key);
-                jsonWriter.WriteString("status", hcr.Value.Status.ToString());
-                jsonWriter.WriteString("description", hcr.Value.Description);
-                jsonWriter.WriteStartObject("data");
-
-                foreach (KeyValuePair<string, object> item in hcr.Value.Data)
-                {
-                    jsonWriter.WritePropertyName(item.Key);
-                    JsonSerializer.Serialize(jsonWriter, item.Value, item.Value?.GetType() ?? typeof(object));
-                }
-
-                jsonWriter.WriteEndObject();
-                jsonWriter.WriteEndObject();
+                jsonWriter.WritePropertyName(item.Key);
+                JsonSerializer.Serialize(jsonWriter, item.Value, item.Value?.GetType() ?? typeof(object));
             }
 
             jsonWriter.WriteEndObject();
-            await jsonWriter.FlushAsync(context.RequestAborted).ConfigureAwait(false);
-
-            await context.Response
-                .WriteAsync(Encoding.UTF8.GetString(ms.ToArray()), context.RequestAborted)
-                .ConfigureAwait(false);
+            jsonWriter.WriteEndObject();
         }
+
+        jsonWriter.WriteEndObject();
+        await jsonWriter.FlushAsync(context.RequestAborted);
+
+        await context.Response
+            .WriteAsync(Encoding.UTF8.GetString(ms.ToArray()), context.RequestAborted);
     }
 }
